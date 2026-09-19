@@ -1,0 +1,123 @@
+---
+title: JavaScript 中使用 `let`、`var` 或 `const` 创建的变量有什么区别？
+---
+
+## TL;DR
+
+在 JavaScript 中，`let`、`var` 和 `const` 都是用于声明变量的关键字，但它们在作用域、初始化规则、是否可以重新声明或重新赋值以及在声明前访问时的行为方面存在显着差异：
+
+| 行为       | `var`       | `let`            | `const`          |
+| ---------- | ----------- | ---------------- | ---------------- |
+| 作用域     | 函数或全局  | 块               | 块               |
+| 初始化     | 可选        | 可选             | 必需             |
+| 重新声明   | 是          | 否               | 否               |
+| 重新赋值   | 是          | 是               | 否               |
+| 声明前访问 | `undefined` | `ReferenceError` | `ReferenceError` |
+
+---
+
+## 行为差异
+
+让我们看看 `var`、`let` 和 `const` 之间的行为差异。
+
+### 作用域
+
+使用 `var` 关键字声明的变量的作用域限定于创建它们的函数，或者如果创建在任何函数之外，则限定于全局对象。`let` 和 `const` 是*块作用域*，这意味着它们只能在最近的一组花括号（函数、if-else 块或 for 循环）内访问。
+
+```js
+function foo() {
+  // All variables are accessible within functions.
+  var bar = 1;
+  let baz = 2;
+  const qux = 3;
+
+  console.log(bar); // 1
+  console.log(baz); // 2
+  console.log(qux); // 3
+}
+
+foo(); // Prints each variable successfully
+console.log(bar); // ReferenceError: bar is not defined
+console.log(baz); // ReferenceError: baz is not defined
+console.log(qux); // ReferenceError: qux is not defined
+```
+
+在下面的示例中，`bar` 可以在 `if` 块之外访问，但 `baz` 和 `quz` 则不能。
+
+```js
+if (true) {
+  var bar = 1;
+  let baz = 2;
+  const qux = 3;
+}
+
+// var variables are accessible anywhere in the function scope.
+console.log(bar); // 1
+// let and const variables are not accessible outside of the block they were defined in.
+console.log(baz); // ReferenceError: baz is not defined
+console.log(qux); // ReferenceError: qux is not defined
+```
+
+### 初始化
+
+`var` 和 `let` 变量可以在没有值的情况下初始化，但 `const` 声明必须初始化。
+
+```js
+var foo; // Ok
+let bar; // Ok
+const baz; // SyntaxError: Missing initializer in const declaration
+```
+
+### 重新声明
+
+使用 `var` 重新声明变量不会抛出错误，但 `let` 和 `const` 会。
+
+```js
+var foo = 1;
+var foo = 2; // Ok
+console.log(foo); // Should print 2, but SyntaxError from baz prevents the code executing.
+
+let baz = 3;
+let baz = 4; // Uncaught SyntaxError: Identifier 'baz' has already been declared
+```
+
+### 重新赋值
+
+`let` 和 `const` 的区别在于，`var` 和 `let` 允许重新分配变量的值，而 `const` 不允许。
+
+```js
+var foo = 1;
+foo = 2; // This is fine.
+
+let bar = 3;
+bar = 4; // This is fine.
+
+const baz = 5;
+baz = 6; // Uncaught TypeError: Assignment to constant variable.
+```
+
+### 声明前访问
+
+`var`、`let` 和 `const` 声明的变量都会被提升。`var` 声明的变量会自动初始化为 `undefined` 值。但是，`let` 和 `const` 变量不会被初始化，在声明之前访问它们将导致 `ReferenceError` 异常，因为它们处于从块的开始到声明被处理的“暂时性死区”。
+
+```js
+console.log(foo); // undefined
+var foo = 'foo';
+
+console.log(baz); // ReferenceError: Cannot access 'baz' before initialization
+let baz = 'baz';
+
+console.log(bar); // ReferenceError: Cannot access 'baz' before initialization
+const bar = 'bar';
+```
+
+## 笔记
+
+- 在现代 JavaScript 中，通常建议默认对不需要重新赋值的变量使用 `const`。这可以提高不变性并防止意外更改。
+- 当您需要在其范围内重新分配变量时，请使用 `let`。
+- 避免使用 `var`，因为它可能存在作用域问题和提升行为。
+- 如果您需要针对旧版浏览器，请使用 `let`/`const` 编写代码，并使用 Babel 等转译器将您的代码编译为旧语法。
+
+## 延伸阅读
+
+- [Javascript 中 "var" vs "let" vs "const" 的区别](https://medium.com/swlh/the-difference-of-var-vs-let-vs-const-in-javascript-abe37e214d66)

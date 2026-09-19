@@ -1,0 +1,238 @@
+---
+title: 解释 JavaScript 中可变对象和不可变对象的区别
+---
+
+## TL;DR
+
+**可变对象** 允许在创建后修改属性和值，这是大多数对象的默认行为。
+
+```js
+const mutableObject = {
+  name: 'John',
+  age: 30,
+};
+
+// Modify the object
+mutableObject.name = 'Jane';
+
+// The object has been modified
+console.log(mutableObject); // Output: { name: 'Jane', age: 30 }
+```
+
+**不可变对象** 在创建后不能直接修改。在不创建全新值的情况下，其内容无法更改。
+
+```js
+const immutableObject = Object.freeze({
+  name: 'John',
+  age: 30,
+});
+
+// Attempt to modify the object
+immutableObject.name = 'Jane';
+
+// The object remains unchanged
+console.log(immutableObject); // Output: { name: 'John', age: 30 }
+```
+
+可变对象和不可变对象之间的主要区别在于可修改性。不可变对象在创建后无法修改，而可变对象可以。
+
+---
+
+## 不可变性
+
+不可变性是函数式编程的核心原则，但它也为面向对象程序提供了很多东西。
+
+### 可变对象
+
+可变性是指对象在创建后可以更改其属性或元素的能力。可变对象是指其状态在创建后可以修改的对象。在 JavaScript 中，对象和数组默认是可变的。它们在内存中存储对其数据的引用。更改属性或元素会修改原始对象。这是一个可变对象的示例：
+
+```js
+const mutableObject = {
+  name: 'John',
+  age: 30,
+};
+
+// Modify the object
+mutableObject.name = 'Jane';
+
+// The object has been modified
+console.log(mutableObject); // Output: { name: 'Jane', age: 30 }
+```
+
+### 不可变对象
+
+不可变对象是指其状态在创建后无法修改的对象。这是一个不可变对象的示例：
+
+```js
+const immutableObject = Object.freeze({
+  name: 'John',
+  age: 30,
+});
+
+// Attempt to modify the object
+immutableObject.name = 'Jane';
+
+// The object remains unchanged
+console.log(immutableObject); // Output: { name: 'John', age: 30 }
+```
+
+原始数据类型（如数字、字符串、布尔值、`null` 和 `undefined`）本质上是不可变的。一旦分配了值，就不能直接修改它们。
+
+```js
+let name = 'Alice';
+name.toUpperCase(); // This won't modify the original name variable
+console.log(name); // Still prints "Alice"
+
+// To change the value, you need to reassign a new string
+name = name.toUpperCase();
+console.log(name); // Now prints "ALICE"
+```
+
+一些内置的不可变 JavaScript 对象是 `Math`、`Date`，但自定义对象通常是可变的。
+
+### `const` vs 不可变对象
+
+一个常见的混淆/误解是使用 `const` 声明变量会使该值不可变，这根本不是真的。
+
+`const` 阻止重新分配变量本身，但不会使其持有的值不可变。这意味着：
+
+- 对于原始值（数字、字符串、布尔值），`const` 使值不可变，因为原始值本质上是不可变的。
+- 对于非原始值，如对象和数组，`const` 仅阻止将新的对象/数组重新分配给变量，但现有对象/数组的属性/元素仍然可以被修改。
+
+另一方面，不可变对象是指在创建后其状态（属性和值）无法修改的对象。这可以通过使用 `Object.freeze()` 等方法来实现，该方法通过阻止对其属性的任何更改来使对象不可变。
+
+```js
+// 使用 const
+const person = { name: 'John' };
+person = { name: 'Jane' }; // 错误：赋值给常量变量
+person.name = 'Jane'; // 允许，person.name 现在是 'Jane'
+
+// 使用 Object.freeze() 创建一个不可变对象
+const frozenPerson = Object.freeze({ name: 'John' });
+frozenPerson.name = 'Jane'; // 静默失败（没有错误，但没有变化）
+frozenPerson = { name: 'Jane' }; // 错误：赋值给常量变量
+```
+
+在第一个使用 `const` 的例子中，不允许将新对象重新分配给 `person`，但允许修改 `name` 属性。在第二个例子中，`Object.freeze()` 使 `frozenPerson` 对象不可变，从而阻止对其属性的任何更改。
+
+需要注意的是，`Object.freeze()` 创建的是一个浅不可变对象。如果对象包含嵌套对象或数组，除非单独冻结，否则这些嵌套数据结构仍然是可变的。
+
+因此，虽然 `const` 为原始值提供了不可变性，但创建真正不可变的对象需要使用 `Object.freeze()` 或其他不可变性技术，如深度冻结或使用来自 [Immer](https://immerjs.github.io/immer/) 或 [Immutable.js](https://immutable-js.com/) 等库的不可变数据结构。
+
+## 在普通 JavaScript 对象中实现不可变的各种方法
+
+以下是在普通 JavaScript 对象中添加/模拟不同形式的不可变性的几种方法。
+
+### 不可变对象属性
+
+通过结合 `writable: false` 和 `configurable: false`，您本质上可以创建一个常量（不能更改、重新定义或删除）作为对象属性，例如：
+
+```js
+const myObject = {};
+Object.defineProperty(myObject, 'number', {
+  value: 42,
+  writable: false,
+  configurable: false,
+});
+console.log(myObject.number); // 42
+myObject.number = 43;
+console.log(myObject.number); // 42
+```
+
+### 阻止对象扩展
+
+如果您想阻止向对象添加新属性，但保持对象的其余属性不变，请调用 `Object.preventExtensions(...)`：
+
+```js
+let myObject = {
+  a: 2,
+};
+
+Object.preventExtensions(myObject);
+
+myObject.b = 3;
+console.log(myObject.b); // undefined
+```
+
+在非严格模式下，创建 `b` 会静默失败。在严格模式下，它会抛出 `TypeError`。
+
+### 密封一个对象
+
+`Object.seal()` 创建一个“密封”对象，这意味着它会获取一个现有对象，并基本上在其上调用 `Object.preventExtensions()`，但也会将所有现有属性标记为 `configurable: false`。因此，您不仅不能添加更多属性，而且也不能重新配置或删除任何现有属性，尽管您仍然可以修改它们的值。
+
+```js
+// 创建一个对象
+const person = {
+  name: 'John Doe',
+  age: 30,
+};
+
+// 密封对象
+Object.seal(person);
+
+// 尝试添加新属性（这将静默失败）
+person.city = 'New York'; // 这没有效果
+
+// 尝试删除现有属性（这将静默失败）
+delete person.age; // 这没有效果
+
+// 修改现有属性（这将起作用）
+person.age = 35;
+
+console.log(person); // 输出：{ name: 'John Doe', age: 35 }
+
+// 尝试重新配置现有属性描述符（这将静默失败）
+Object.defineProperty(person, 'name', { writable: false }); // 在非严格模式下静默失败
+
+// 检查对象是否被密封
+console.log(Object.isSealed(person)); // 输出：true
+```
+
+### 冻结一个对象
+
+`Object.freeze()` 创建一个冻结对象，这意味着它会获取一个现有对象，并基本上在其上调用 `Object.seal()`，但它也会将所有“数据访问器”属性标记为 writable:false，以便它们的值不能被更改。
+
+这种方法是您可以为对象本身达到的最高级别的不可变性，因为它阻止了对对象或其任何直接属性的任何更改（尽管，如上所述，任何引用的其他对象的内容不受影响）。
+
+```js
+let immutableObject = Object.freeze({});
+```
+
+冻结对象不允许向对象添加新属性，并阻止用户删除或更改现有属性。`Object.freeze()` 保留了对象的枚举性、可配置性、可写性和 `prototype`。它返回传递的对象，并且不会创建冻结副本。
+
+`Object.freeze()` 使对象不可变。但是，它不一定是常量。`Object.freeze` 阻止对对象本身及其直接属性的修改，冻结对象内的嵌套对象仍然可以被修改。
+
+```js
+let obj = {
+  user: {},
+};
+
+Object.freeze(obj);
+obj.user.name = 'John';
+
+console.log(obj.user.name); //Output: 'John'
+```
+
+## 不可变性的优缺点是什么？
+
+### 优点
+
+- **更容易进行更改检测**：可以通过引用相等性以高性能和简单的方式确定对象相等性。这对于比较 React 和 Redux 中的对象差异很有用。
+- **更简单**：使用不可变对象的程序更易于思考，因为您无需担心对象可能随时间演变的方式。
+- 通过引用轻松共享：一个对象的副本与另一个对象一样好，因此您可以缓存对象或多次重用同一对象。
+- **线程安全**：不可变对象可以在多线程环境中的线程之间安全使用，因为它们不会有在其他并发运行的线程中被修改的风险。在大多数情况下，JavaScript 在单线程环境中运行
+- **减少内存需求**：使用 [Immer](https://immerjs.github.io/immer/) 和 [Immutable.js](https://immutable-js.com/) 等库，使用结构共享修改对象，并且对于具有相似结构的多个对象，所需的内存更少。
+- **无需防御性复制**：当从不可变对象返回或传递给函数时，不再需要防御性副本，因为不可变对象不可能被它修改。
+
+### 缺点
+
+- **难以自行创建**：不可变数据结构及其操作的朴素实现可能会导致性能极差，因为每次都会创建新对象。建议使用库来实现高效的不可变数据结构和利用结构共享的操作。
+- **潜在的负面性能**：分配（和释放）许多小对象而不是修改现有对象可能会导致性能影响。分配器或垃圾收集器的复杂性通常取决于堆上的对象数量。
+- **循环数据结构的复杂性**：循环数据结构（如图形）难以实现。
+
+## 延伸阅读
+
+- [Object.defineProperty() | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
+- [Object.freeze() | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
+- [Object.seal() | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)
+- [Object.preventExtensions() | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions)

@@ -1,0 +1,133 @@
+---
+title: 如何在 JavaScript 文件之间共享代码？
+---
+
+## TL;DR
+
+要在 JavaScript 文件之间共享代码，您可以使用模块。在现代 JavaScript 中，您可以使用带有 `export` 和 `import` 语句的 ES6 模块。例如，您可以从一个文件导出一个函数并将其导入到另一个文件中：
+
+```javascript
+// file1.js
+export function greet() {
+  console.log('Hello, world!');
+}
+
+// file2.js
+import { greet } from './file1.js';
+greet();
+```
+
+或者，在 Node.js 中，您可以使用 `module.exports` 和 `require`：
+
+```javascript
+// file1.js
+module.exports = function greet() {
+  console.log('Hello, world!');
+};
+
+// file2.js
+const greet = require('./file1.js');
+greet();
+```
+
+---
+
+## 使用 ES6 模块
+
+### 导出代码
+
+要共享代码，您可以使用 `export` 关键字从模块中导出变量、函数或类：
+
+```javascript
+// utils.js
+export function add(a, b) {
+  return a + b;
+}
+
+export const PI = 3.14;
+```
+
+### 导入代码
+
+然后，您可以使用 `import` 关键字在另一个文件中导入导出的代码：
+
+```javascript
+// main.js
+import { add, PI } from './utils.js';
+
+console.log(add(2, 3)); // 5
+console.log(PI); // 3.14
+```
+
+### 默认导出
+
+您还可以从模块导出一个默认值：
+
+```javascript
+// math.js
+export default function subtract(a, b) {
+  return a - b;
+}
+```
+
+并在没有大括号的情况下导入它：
+
+```javascript
+// main.js
+import subtract from './math.js';
+
+console.log(subtract(5, 2)); // 3
+```
+
+## 在 Node.js 中使用 CommonJS 模块
+
+### 导出代码
+
+在 Node.js 中，您可以使用 `module.exports` 导出代码：
+
+```javascript
+// utils.js
+module.exports.add = function (a, b) {
+  return a + b;
+};
+
+module.exports.PI = 3.14;
+```
+
+### 导入代码
+
+然后，您可以使用 `require` 导入导出的代码：
+
+```javascript
+// main.js
+const utils = require('./utils.js');
+
+console.log(utils.add(2, 3)); // 5
+console.log(utils.PI); // 3.14
+```
+
+### 导出单个值
+
+您也可以导出一个值：
+
+```javascript
+// math.js
+module.exports = function subtract(a, b) {
+  return a - b;
+};
+```
+
+并直接导入它：
+
+```javascript
+// main.js
+const subtract = require('./math.js');
+
+console.log(subtract(5, 2)); // 3
+```
+
+## 延伸阅读
+
+- [MDN Web Docs on ES6 modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+- [Node.js documentation on modules](https://nodejs.org/api/modules.html)
+- [JavaScript modules: A beginner’s guide](https://www.freecodecamp.org/news/javascript-modules-a-beginner-s-guide-783f7d7a5fcc/)

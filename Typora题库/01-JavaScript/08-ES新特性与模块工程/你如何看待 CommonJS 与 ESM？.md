@@ -1,0 +1,112 @@
+---
+title: 你如何看待 CommonJS 与 ESM？
+---
+
+## TL;DR
+
+JavaScript 已经演进其模块系统。ESM (ECMAScript Modules) 使用 `import` / `export` 是官方标准，在现代浏览器和 Node.js 中原生支持，专为同步和异步用例设计。CommonJS (CJS) 使用 `require` / `module.exports` 是 Node.js 的原始标准，主要用于同步，并且仍然在 Node 生态系统中占主导地位。AMD (Asynchronous Module Definition) 使用 `define` / `require` 是早期为浏览器中的异步加载而设计的系统，但现在已经基本过时，被 ESM 取代。
+
+---
+
+### 概述
+
+模块系统通过允许代码被拆分成具有清晰依赖关系的可重用部分（模块）来帮助管理这种复杂性。随着时间的推移，在官方标准被采用之前，出现了不同的模块系统。
+
+### CommonJS
+
+#### 特点
+
+- 专为同步加载模块而设计
+- 主要用于服务器端环境，如 Node.js
+- 使用 `module.exports` 和 `require` 来定义和加载模块
+
+#### 示例
+
+```javascript
+// 在 CommonJS 中定义一个模块
+const dep1 = require('dependency1');
+const dep2 = require('dependency2');
+
+module.exports = {
+  // 模块代码在这里
+};
+
+// 在 CommonJS 中加载一个模块
+const mod1 = require('module1');
+const mod2 = require('module2');
+
+// 使用 mod1 和 mod2 的代码
+```
+
+### ESM (ECMAScript Modules)
+
+#### 特点
+
+- 官方 JavaScript 标准模块系统
+- 在现代浏览器和 Node.js 中原生支持
+- 专为异步和同步场景设计
+- 使用 `export` 和 `import` 定义和加载模块
+
+#### 示例
+
+```javascript
+import dep1 from 'dependency1'; // if dependency1 had a default export
+import { dep2 } from 'dependency2'; // named import to import something specific from dependency2
+
+// Module code using dep1, dep2...
+
+export function someFunction() {
+  // ... function logic ...
+}
+export const someValue = 'hello';
+
+// Or export multiple things at once
+// export { someFunction, someValue };
+
+// Or export a default value
+// export default class MyClass {
+// ...
+// }
+```
+
+### 主要区别
+
+#### 加载机制
+
+- **CommonJS**: 同步（加载完成前阻塞）。
+- **ESM**: 异步友好（在浏览器中非阻塞）。
+
+#### 环境适用性
+
+- **CommonJS**: Node.js 遗留标准。
+- **ESM**: 官方标准（浏览器和 Node.js）。
+
+#### 语法
+
+- **CommonJS**: `require()` / `module.exports`。
+- **ESM**: `import` / `export`。
+
+#### 分析
+
+- **CommonJS**: 动态（运行时分析）。
+- **ESM**: 静态（编译时分析，启用 tree-shaking）。
+
+### 用例
+
+#### CommonJS
+
+- 旧的 Node.js 项目或需要同步加载的地方。
+- Node.js 中的默认设置，除非配置为 ESM。
+
+#### ESM
+
+- 现代 Web 开发（原生浏览器支持）。
+- 新的 Node.js 项目，特别是那些需要异步特性或优化的项目。
+- 既用于浏览器又用于服务器的代码。
+
+## 延伸阅读
+
+- [MDN Web Docs on JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+- [Node.js: CommonJS modules](https://nodejs.org/api/modules.html)
+- [Node.js: ESM](https://nodejs.org/api/esm.html)
+- [RequireJS (AMD Loader - Historical)](https://requirejs.org/docs/api.html)

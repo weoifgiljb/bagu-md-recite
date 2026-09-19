@@ -1,0 +1,45 @@
+---
+title: '解释为什么以下代码不能作为 IIFE 工作：`function foo(){}();`。需要更改什么才能使其成为一个正确的 IIFE？'
+---
+
+## TL;DR
+
+代码 `function foo(){}();` 不能作为立即调用函数表达式 (IIFE) 工作，因为 JavaScript 解析器将 `function foo(){}` 视为函数声明，而不是表达式。要使其成为 IIFE，你需要将函数用括号括起来，将其转换为函数表达式：`(function foo(){})();`。
+
+---
+
+## 为什么代码不能作为 IIFE 工作
+
+### 函数声明 vs. 函数表达式
+
+在 JavaScript 中，函数声明和函数表达式被解析器区别对待。代码 `function foo(){}` 被解释为函数声明。函数声明不会立即调用；它们会被提升到其作用域的顶部，并且可以在代码的后面调用。
+
+### 语法错误
+
+当你尝试通过在末尾添加 `();` 来立即调用函数声明时，会导致语法错误，因为解析器期望立即调用函数表达式，而不是声明。
+
+## 如何正确地将其制作为 IIFE
+
+### 用括号括起来
+
+要将函数声明转换为函数表达式，你需要将函数声明用括号括起来。这告诉 JavaScript 解析器将其视为一个表达式。以下是更正后的代码：
+
+```javascript
+(function foo() {})();
+```
+
+### 替代语法
+
+你也可以使用替代语法，将括号放在原始行周围：
+
+```javascript
+(function foo() {})();
+```
+
+这两种语法都是有效的，并且将正确地创建 IIFE。
+
+## 延伸阅读
+
+- [MDN Web Docs: IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
+- [JavaScript Function Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)
+- [JavaScript Function Declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)

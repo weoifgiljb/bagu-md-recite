@@ -1,0 +1,182 @@
+---
+title: 解释 JavaScript 中原型继承的工作原理
+---
+
+## TL;DR
+
+JavaScript 中的原型继承是对象从其他对象继承属性和方法的一种方式。每个 JavaScript 对象都有一个名为 `[[Prototype]]` 的特殊隐藏属性（通常通过 `__proto__` 或使用 `Object.getPrototypeOf()` 访问），它引用另一个对象，该对象被称为对象的“原型”。
+
+当访问对象的属性，并且在该对象上找不到该属性时，JavaScript 引擎会查看对象的 `__proto__`，以及 `__proto__` 的 `__proto__`，依此类推，直到它在其中一个 `__proto__` 上找到定义的属性，或者直到它到达原型链的末尾。
+
+这种行为模拟了经典继承，但实际上它更像是[委托而不是继承](https://davidwalsh.name/javascript-objects)。
+
+以下是原型继承的示例：
+
+```js
+// Parent object constructor.
+function Animal(name) {
+  this.name = name;
+}
+
+// Add a method to the parent object's prototype.
+Animal.prototype.makeSound = function () {
+  console.log('The ' + this.constructor.name + ' makes a sound.');
+};
+
+// Child object constructor.
+function Dog(name) {
+  Animal.call(this, name); // Call the parent constructor.
+}
+
+// Set the child object's prototype to be the parent's prototype.
+Object.setPrototypeOf(Dog.prototype, Animal.prototype);
+
+// Add a method to the child object's prototype.
+Dog.prototype.bark = function () {
+  console.log('Woof!');
+};
+
+// Create a new instance of Dog.
+const bolt = new Dog('Bolt');
+
+// Call methods on the child object.
+console.log(bolt.name); // "Bolt"
+bolt.makeSound(); // "The Dog makes a sound."
+bolt.bark(); // "Woof!"
+```
+
+需要注意的是：
+
+- `.makeSound` 未在 `Dog` 上定义，因此 JavaScript 引擎会向上查找原型链，并在继承的 `Animal` 上找到 `.makeSound`。
+- 不再推荐使用 `Object.create()` 来构建继承链。请改用 `Object.setPrototypeOf()`。
+
+---
+
+## Javascript 中的原型继承
+
+原型继承是 JavaScript 中用于创建从其他对象继承属性和方法对象的特性。JavaScript 使用基于原型的模型，而不是基于类的继承模型，对象可以直接从其他对象继承。
+
+### 关键概念
+
+1. **原型**：JavaScript 中的每个对象都有一个原型，它也是一个对象。当您使用对象字面量或构造函数创建对象时，新对象将链接到其构造函数的原型，如果未指定原型，则链接到 `Object.prototype`。这通常使用 `__proto__` 或 `[[Prototype]]` 引用。您还可以使用内置方法 `Object.getPrototypeOf()` 获取原型，并且可以通过 `Object.setPrototypeOf()` 设置对象的原型。
+
+```js
+// Define a constructor function
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+// Add a method to the prototype
+Person.prototype.sayHello = function () {
+  console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+};
+
+// Create a new object using the constructor function
+let john = new Person('John', 30);
+
+// The new object has access to the methods defined on the prototype
+john.sayHello(); // "Hello, my name is John and I am 30 years old."
+
+// The prototype of the new object is the prototype of the constructor function
+console.log(john.__proto__ === Person.prototype); // true
+
+// You can also get the prototype using Object.getPrototypeOf()
+console.log(Object.getPrototypeOf(john) === Person.prototype); // true
+
+// You can set the prototype of an object using Object.setPrototypeOf()
+let newProto = {
+  sayGoodbye: function () {
+    console.log(`Goodbye, my name is ${this.name}`);
+  },
+};
+
+Object.setPrototypeOf(john, newProto);
+
+// Now john has access to the methods defined on the new prototype
+john.sayGoodbye(); // "Goodbye, my name is John"
+
+// But no longer has access to the methods defined on the old prototype
+console.log(john.sayHello); // undefined
+```
+
+2. **原型链**：当访问对象的属性或方法时，JavaScript 首先在对象本身上查找它。如果找不到，它会查看对象的原型，然后是原型的原型，依此类推，直到找到该属性或到达链的末尾（即 `null`）。
+
+3. **构造函数**：JavaScript 提供了构造函数来创建对象。当一个函数与 new 关键字一起用作构造函数时，新对象的原型 (`[[Prototype]]`) 将设置为构造函数 的原型属性。
+
+```js
+// 定义一个构造函数
+function Animal(name) {
+  this.name = name;
+}
+
+// 将一个方法添加到原型上
+Animal.prototype.sayName = function () {
+  console.log(`我的名字是 ${this.name}`);
+};
+
+// 定义一个新的构造函数
+function Dog(name, breed) {
+  Animal.call(this, name);
+  this.breed = breed;
+}
+
+// 设置 Dog 的原型以继承自 Animal 的原型
+Object.setPrototypeOf(Dog.prototype, Animal.prototype);
+
+// 将一个方法添加到 Dog 的原型上
+Dog.prototype.bark = function () {
+  console.log('汪！');
+};
+
+// 使用 Dog 构造函数创建一个新对象
+let fido = new Dog('Fido', 'Labrador');
+
+// 新对象可以访问在其自身原型和 Animal 原型上定义的方法
+fido.bark(); // "汪！"
+fido.sayName(); // "我的名字是 Fido"
+
+// 如果我们尝试访问 Dog 原型或 Animal 原型上不存在的方法，JavaScript 将返回 undefined
+console.log(fido.fly); // undefined
+```
+
+4. **`Object.create()`**: 此方法创建一个新对象，其内部 `[[Prototype]]` 直接链接到指定的原型对象。这是创建从另一个特定对象继承的对象的最直接方法，无需涉及构造函数。如果通过 `Object.create(null)` 创建一个对象，它将不会从 `Object.prototype` 继承任何属性。这意味着该对象将没有任何内置属性或方法，如 `toString()`、`hasOwnProperty()`,
+
+```js
+// Define a prototype object
+let proto = {
+  greet: function () {
+    console.log(`Hello, my name is ${this.name}`);
+  },
+};
+
+// Use `Object.create()` to create a new object with the specified prototype
+let person = Object.create(proto);
+person.name = 'John';
+
+// The new object has access to the methods defined on the prototype
+person.greet(); // "Hello, my name is John"
+
+// Check if the object has a property
+console.log(person.hasOwnProperty('name')); // true
+
+// Create an object that does not inherit from Object.prototype
+let animal = Object.create(null);
+animal.name = 'Rocky';
+
+// The new object does not have any built-in properties or methods
+console.log(animal.toString); // undefined
+console.log(animal.hasOwnProperty); // undefined
+
+// But you can still add and access custom properties
+animal.describe = function () {
+  console.log(`Name of the animal is ${this.name}`);
+};
+
+animal.describe(); // "Name of the animal is Rocky"
+```
+
+## 资源
+
+- [Inheritance and the prototype chain | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
+- [JavaScript Visualized: Prototypal Inheritance](https://dev.to/lydiahallie/javascript-visualized-prototypal-inheritance-47co)

@@ -1,0 +1,159 @@
+---
+title: JavaScript 中高阶函数的定义是什么？
+---
+
+## TL;DR
+
+高阶函数是指将一个或多个函数作为参数的函数，它使用这些函数对某些数据进行操作，和/或返回一个函数作为结果。
+
+高阶函数旨在抽象一些重复执行的操作。 典型的例子是 `Array.prototype.map()`，它接受一个数组和一个函数作为参数。 然后，`Array.prototype.map()` 使用此函数转换数组中的每个项目，返回一个包含转换后的数据的新数组。 JavaScript 中其他常见的例子是 `Array.prototype.forEach()`、`Array.prototype.filter()` 和 `Array.prototype.reduce()`。 高阶函数不仅仅需要操作数组，因为从另一个函数返回一个函数有很多用例。 `Function.prototype.bind()` 就是一个返回另一个函数的例子。
+
+想象一下，我们有一个需要转换为大写的名称数组。 命令式方法如下：
+
+```js
+const names = ['irish', 'daisy', 'anna'];
+
+function transformNamesToUppercase(names) {
+  const results = [];
+  for (let i = 0; i < names.length; i++) {
+    results.push(names[i].toUpperCase());
+  }
+  return results;
+}
+
+console.log(transformNamesToUppercase(names)); // ['IRISH', 'DAISY', 'ANNA']
+```
+
+使用 `Array.prototype.map(transformerFn)` 使代码更短、更具声明性。
+
+```js
+const names = ['irish', 'daisy', 'anna'];
+
+function transformNamesToUppercase(names) {
+  return names.map((name) => name.toUpperCase());
+}
+
+console.log(transformNamesToUppercase(names)); // ['IRISH', 'DAISY', 'ANNA']
+```
+
+---
+
+## 高阶函数
+
+高阶函数是一个将另一个函数作为参数或返回一个函数作为其结果的函数。
+
+### 函数作为参数
+
+高阶函数可以将另一个函数作为参数并执行它。
+
+```js
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+function greetName(greeter, name) {
+  console.log(greeter(name));
+}
+
+greetName(greet, 'Alice'); // Output: Hello, Alice!
+```
+
+在这个例子中，`greetName`函数是高阶函数，因为它将另一个函数(`greet`)作为参数，并使用它为给定的名称生成问候语。
+
+### 函数作为返回值
+
+高阶函数可以返回另一个函数。
+
+```js
+function multiplier(factor) {
+  return function (num) {
+    return num * factor;
+  };
+}
+
+const double = multiplier(2);
+const triple = multiplier(3);
+
+console.log(double(5)); // Output: 10
+console.log(triple(5)); // Output: 15
+```
+
+在此示例中，`multiplier` 函数返回一个新函数，该函数将任何数字乘以指定的因子。 返回的函数是一个闭包，它记住外部函数中的 `factor` 值。 `multiplier` 函数是一个高阶函数，因为它返回另一个函数。
+
+### 实际例子
+
+1. **日志装饰器**：一个高阶函数，它向另一个函数添加日志记录功能：
+
+```js
+function withLogging(fn) {
+  return function (...args) {
+    console.log(`Calling ${fn.name} with arguments`, args);
+    return fn.apply(this, args);
+  };
+}
+
+function add(a, b) {
+  return a + b;
+}
+
+const loggedAdd = withLogging(add);
+console.log(loggedAdd(2, 3));
+// Output:
+// Calling add with arguments [2, 3]
+// 5
+```
+
+`withLogging` 函数是一个高阶函数，它接受一个函数 fn 作为参数，并返回一个新函数，该函数在执行原始函数之前记录函数调用
+
+2. **记忆化**：一个高阶函数，它缓存函数的计算结果以避免冗余计算：
+
+```js
+function memoize(fn) {
+  const cache = new Map();
+  return function (...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+const memoizedFibonacci = memoize(function (n) {
+  if (n <= 1) return n;
+  return memoizedFibonacci(n - 1) + memoizedFibonacci(n - 2);
+});
+
+console.log(memoizedFibonacci(10)); // Output: 55
+console.log(memoizedFibonacci(100)); // Output: 354224848179262000000
+```
+
+`memoize` 函数是一个高阶函数，它接受一个函数 `fn` 作为参数，并返回一个新函数，该函数根据原始函数的参数缓存其结果。
+
+1. **Lodash**：Lodash 是一个实用程序库，它提供了广泛的函数，用于处理数组、对象、字符串等，其中大多数是高阶函数。
+
+```js
+import _ from 'lodash';
+
+const numbers = [1, 2, 3, 4, 5];
+
+// Filter array
+const evenNumbers = _.filter(numbers, (n) => n % 2 === 0); // [2, 4]
+
+// Map array
+const doubledNumbers = _.map(numbers, (n) => n * 2); // [2, 4, 6, 8, 10]
+
+// Find the maximum value
+const maxValue = _.max(numbers); // 5
+
+// Sum all values
+const sum = _.sum(numbers); // 15
+```
+
+## 延伸阅读
+
+- [高阶函数](https://eloquentjavascript.net/05_higher_order.html)
+- [理解 JavaScript 中的高阶函数](https://blog.bitsrc.io/understanding-higher-order-functions-in-javascript-75461803bad)
+- [高阶函数：如何使用 Filter、Map 和 Reduce 来获得更易于维护的代码](https://www.freecodecamp.org/news/higher-order-functions-in-javascript-d9101f9cf528/)

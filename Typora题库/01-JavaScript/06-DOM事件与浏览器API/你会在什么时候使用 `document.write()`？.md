@@ -1,0 +1,67 @@
+---
+title: 你会在什么时候使用 `document.write()`？
+---
+
+## TL;DR
+
+`document.write()` 在现代 Web 开发中很少使用，因为它在页面加载后调用时会覆盖整个文档。它主要用于在初始页面加载期间编写内容等简单任务，例如用于教育目的或快速调试。但是，通常建议使用其他方法，如 `innerHTML`、`appendChild()` 或现代框架来操作 DOM。
+
+---
+
+## 你会在什么时候使用 `document.write()`？
+
+### 初始页面加载
+
+`document.write()` 可用于在初始页面加载期间将内容直接写入文档。这是它可能适用的少数情况之一，因为它对于非常基本的任务可能更简单、更快。
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <title>Document Write Example</title>
+  </head>
+  <body>
+    <script>
+      document.write('<h1>Hello, World!</h1>');
+    </script>
+  </body>
+</html>
+```
+
+### 教育目的
+
+`document.write()` 有时用于教育环境中，以演示基本的 JavaScript 概念。它提供了一种直接的方式来展示 JavaScript 如何操作 DOM。
+
+### 快速调试
+
+对于快速而粗略的调试，`document.write()` 可用于将变量或消息直接输出到文档。但是，不建议在生产代码中使用此方法。
+
+```javascript
+var debugMessage = 'Debugging message';
+document.write(debugMessage);
+```
+
+### 遗留代码
+
+在一些较旧的代码库中，你可能会遇到 `document.write()`。虽然不建议在新项目中使用它，但了解它对于维护或重构旧代码可能很有用。
+
+### 为什么不使用 `document.write()`？
+
+- **覆盖文档**：如果在页面加载后调用，`document.write()` 将覆盖整个文档，这可能导致内容丢失和糟糕的用户体验。
+- **更好的替代方案**：像 `innerHTML`、`appendChild()` 和 React 或 Vue 等框架的现代方法提供了更多控制，并且使用起来更安全。
+
+```javascript
+// 使用 innerHTML
+document.getElementById('content').innerHTML = '<h1>Hello, World!</h1>';
+
+// 使用 appendChild
+var newElement = document.createElement('h1');
+newElement.textContent = 'Hello, World!';
+document.getElementById('content').appendChild(newElement);
+```
+
+## 延伸阅读
+
+- [MDN Web Docs on document.write()](https://developer.mozilla.org/en-US/docs/Web/API/Document/write)
+- [Why is document.write() considered harmful?](https://stackoverflow.com/questions/802854/why-is-document-write-considered-a-bad-practice)
+- [Modern DOM manipulation methods](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#modifying_the_document)

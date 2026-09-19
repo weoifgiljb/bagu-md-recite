@@ -1,0 +1,78 @@
+---
+title: JavaScript 变量 `null`、`undefined` 和未声明的区别是什么？
+subtitle: 如何检查这些状态？
+---
+
+## TL;DR
+
+| 特性 | `null` | `undefined` | 未声明 |
+| --- | --- | --- | --- |
+| 含义 | 由开发人员显式设置，表示变量没有值 | 变量已声明但未赋值 | 变量根本未声明 |
+| 类型（通过 `typeof` 运算符） | `'object'` | `'undefined'` | `'undefined'` |
+| 等式比较 | `null == undefined` 为 `true` | `undefined == null` 为 `true` | 抛出 `ReferenceError` |
+
+---
+
+## 未声明
+
+**未声明** 变量是在您将值分配给先前未使用 `var`、`let` 或 `const` 创建的标识符时创建的。未声明的变量将在全局范围内定义，在当前范围之外。在严格模式下，当您尝试分配给未声明的变量时，将抛出 `ReferenceError`。未声明的变量和全局变量一样糟糕。不惜一切代价避免它们！要检查它们，请将其用法包装在 `try`/`catch` 块中。
+
+```js
+function foo() {
+  x = 1; // 在严格模式下抛出 ReferenceError
+}
+
+foo();
+console.log(x); // 1 (如果不在严格模式下)
+```
+
+对未声明的变量使用 `typeof` 运算符将给出 `'undefined'`。
+
+```js
+console.log(typeof y === 'undefined'); // true
+```
+
+## `undefined`
+
+一个`undefined`的变量是已声明但未赋值的变量。它的类型是`undefined`。如果一个函数没有返回值，并且它的结果被分配给一个变量，那么该变量也将具有`undefined`值。要检查它，请使用严格相等运算符（`===`）或`typeof`进行比较，这将给出`'undefined'`字符串。请注意，您不应该使用宽松相等运算符（`==`）进行检查，因为它在值为`null`时也会返回`true`。
+
+```js
+let foo;
+console.log(foo); // undefined
+console.log(foo === undefined); // true
+console.log(typeof foo === 'undefined'); // true
+
+console.log(foo == null); // true. 错误，不要使用它来检查一个值是否为 undefined!
+
+function bar() {} // 如果没有任何返回，则返回 undefined。
+let baz = bar();
+console.log(baz); // undefined
+```
+
+## `null`
+
+一个 `null` 的变量将被显式地赋值为 `null` 值。它表示没有值，并且与 `undefined` 的不同之处在于它已被显式赋值。要检查 `null`，只需使用严格相等运算符进行比较。请注意，与上述类似，您不应该使用松散相等运算符 (`==`) 进行检查，因为它在值为 `undefined` 时也会返回 `true`。
+
+```js
+const foo = null;
+console.log(foo === null); // true
+console.log(typeof foo === 'object'); // true
+
+console.log(foo == undefined); // true. 错误，不要使用它来检查一个值是否为 null!
+```
+
+## 注意事项
+
+- 养成一个好习惯，永远不要让你的变量未声明或未赋值。如果您不打算使用它们，在声明后显式地将 `null` 赋值给它们。
+- 始终在变量使用前显式声明它们以防止错误。
+- 在您的工作流程中使用一些静态分析工具（例如 [ESLint](https://eslint.org/)、TypeScript 编译器），将启用您未引用未声明变量的检查。
+
+## 实践
+
+在 GreatFrontEnd 上练习实现 [检查 `null` 和 `undefined` 的类型实用程序](https://www.greatfrontend.com/questions/javascript/type-utilities?fpr=yangshun)。
+
+## 延伸阅读
+
+- [MDN Web 文档：null](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/null)
+- [MDN Web 文档：undefined](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined)
+- [MDN Web 文档：ReferenceError](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError)

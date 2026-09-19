@@ -1,0 +1,170 @@
+---
+title: JavaScript 中使用展开语法有什么好处？它与 rest 语法有何不同？
+---
+
+## TL;DR
+
+**展开语法** (`...`) 允许将可迭代对象（如数组或字符串）扩展为单个元素。这通常被用作一种方便且现代的方式，通过组合现有数组或对象来创建新的数组或对象。
+
+| 操作     | 传统方式                        | 展开语法               |
+| -------- | ------------------------------- | ---------------------- |
+| 数组克隆 | `arr.slice()`                   | `[...arr]`             |
+| 数组合并 | `arr1.concat(arr2)`             | `[...arr1, ...arr2]`   |
+| 对象克隆 | `Object.assign({}, obj)`        | `{ ...obj }`           |
+| 对象合并 | `Object.assign({}, obj1, obj2)` | `{ ...obj1, ...obj2 }` |
+
+**Rest 语法**与展开语法的作用相反。它将可变数量的参数收集到一个数组中。这通常用于函数参数中，以处理动态数量的参数。
+
+```js
+// Using rest syntax in a function
+function sum(...numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3)); // Output: 6
+```
+
+---
+
+## 展开语法
+
+ES2015 的展开语法在函数式编程范式中非常有用，因为我们可以轻松地创建数组或对象的副本/合并，而无需使用 `Object.create`、`Object.assign`、`Array.prototype.slice` 或库函数。此语言特性经常用于 Redux 和 RxJS 项目中。
+
+### 复制数组/对象
+
+展开语法提供了一种简洁的方式来创建数组或对象的副本，而无需修改原始数组或对象。这对于创建不可变数据结构很有用。但是请注意，通过展开运算符复制的数组是浅拷贝的。
+
+```js
+// Copying arrays
+const array = [1, 2, 3];
+const newArray = [...array];
+console.log(newArray); // Output: [1, 2, 3]
+
+// Copying objects
+const person = { name: 'John', age: 30 };
+const newObj = { ...person, city: 'New York' };
+console.log(newObj); // Output: { name: 'John', age: 30, city: 'New York' }
+```
+
+### 合并数组/对象
+
+展开语法允许您通过将其元素/属性展开到新的数组或对象中来合并数组或对象。
+
+```js
+// Merging arrays
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+const mergedArray = [...arr1, ...arr2];
+console.log(mergedArray); // Output: [1, 2, 3, 4, 5, 6]
+
+// Merging objects
+const obj1 = {
+  foo: 'bar',
+};
+
+const obj2 = {
+  qux: 'baz',
+};
+
+const mergedObj = { ...obj1, ...obj2 };
+console.log(mergedObj); // Output: { foo: "bar", qux: "baz" }
+```
+
+### 将参数传递给函数
+
+使用展开语法将值数组作为单个参数传递给函数，避免了使用 `apply()` 的需要。
+
+```js
+const numbers = [1, 2, 3];
+const max = Math.max(...numbers); // Same as Math.max(1, 2, 3)
+console.log(max); // Output: 3
+```
+
+### 数组与对象展开
+
+只有可迭代的值（如 `Array` 和 `String`）才可以在数组中展开。尝试展开不可迭代的值将导致 `TypeError`。
+
+将对象展开到数组中：
+
+```js
+const person = {
+  name: 'Todd',
+  age: 29,
+};
+const array = [...person]; // Error: Uncaught TypeError: person is not iterable
+```
+
+另一方面，数组可以展开到对象中。
+
+```js
+const array = [1, 2, 3];
+const obj = { ...array };
+console.log(obj); // { 0: 1, 1: 2, 2: 3 }
+```
+
+## Rest 语法
+
+JavaScript 中的 rest 语法 (`...`) 允许你将不定数量的元素表示为数组或对象。它就像展开语法的逆向操作，获取数据并将其放入数组中，而不是解包数组中的数据，它适用于函数参数以及数组和对象解构赋值。
+
+### 函数中的 Rest 参数
+
+Rest 语法可用于函数参数中，将所有剩余的参数收集到一个数组中。当你不知道将向函数传递多少个参数时，这特别有用。
+
+```js
+function addFiveToABunchOfNumbers(...numbers) {
+  return numbers.map((x) => x + 5);
+}
+
+const result = addFiveToABunchOfNumbers(4, 5, 6, 7, 8, 9, 10);
+console.log(result); // Output: [9, 10, 11, 12, 13, 14, 15]
+```
+
+与使用 `arguments` 对象相比，它提供了更简洁的语法，`arguments` 对象在箭头函数中不受支持，并且表示 **所有** 参数，而下面 rest 语法的用法允许 `remaining` 表示第三个参数及之后的参数。
+
+```js
+const [first, second, ...remaining] = [1, 2, 3, 4, 5];
+console.log(first); // Output: 1
+console.log(second); // Output: 2
+console.log(remaining); // Output: [3, 4, 5]
+```
+
+请注意，rest 参数必须位于末尾。rest 参数会收集所有剩余的参数，因此以下操作没有意义，并且会导致错误：
+
+```js
+function addFiveToABunchOfNumbers(arg1, ...numbers, arg2) {
+  // Error: Rest parameter must be last formal parameter.
+}
+```
+
+### 数组解构
+
+Rest 语法可用于数组解构，将剩余的元素收集到一个新数组中。
+
+```js
+const [a, b, ...rest] = [1, 2, 3, 4];
+console.log(a); // Output: 1
+console.log(b); // Output: 2
+console.log(rest); // Output: [3, 4]
+```
+
+### 对象解构
+
+Rest 语法可用于对象解构，将剩余的属性收集到一个新对象中。
+
+```js
+const { e, f, ...others } = {
+  e: 1,
+  f: 2,
+  g: 3,
+  h: 4,
+};
+console.log(e); // Output: 1
+console.log(f); // Output: 2
+console.log(others); // Output: { g: 3, h: 4 }
+```
+
+## 延伸阅读
+
+- [展开语法 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+- [Rest 参数 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/rest_parameters)
+- [Rest 参数和展开语法 | JavaScript.info](https://zh.javascript.info/rest-parameters-spread)

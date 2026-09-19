@@ -1,0 +1,28 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local runtime / personal
+_scratch/
+*.bak
+*.bak-*
+*.localstorage.bak.html
+背诵本/recite.db
+背诵本/recite.db-*
+我的笔记/
+top-javascript-interview-questions/
+top-reactjs-interview-questions/
+
+# Secrets
+.env
+.env.*
+*.pem

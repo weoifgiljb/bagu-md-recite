@@ -1,0 +1,216 @@
+---
+title: JavaScript 中使用什么语言结构来迭代对象属性和数组项？
+---
+
+## TL;DR
+
+在 JavaScript 中，有多种方法可以迭代对象属性和数组：
+
+**`for...in` 循环**
+
+`for...in` 循环遍历对象的所有可枚举属性，包括继承的可枚举属性。因此，如果您只想遍历对象的自有属性，进行检查非常重要
+
+```js
+const obj = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+
+for (const key in obj) {
+  // To avoid iterating over inherited properties
+  if (Object.hasOwn(obj, key)) {
+    console.log(`${key}: ${obj[key]}`);
+  }
+}
+```
+
+**`Object.keys()`**
+
+`Object.keys()` 返回一个由对象自身的可枚举属性名称组成的数组。然后，您可以使用 for...of 循环或 forEach 遍历此数组。
+
+```js
+const obj = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+
+Object.keys(obj).forEach((key) => {
+  console.log(`${key}: ${obj[key]}`);
+});
+```
+
+迭代数组最常见的方法是使用 `for` 循环和 `Array.prototype.forEach` 方法。
+
+**使用 `for` 循环**
+
+```js
+let array = [1, 2, 3, 4, 5, 6];
+for (let index = 0; index < array.length; index++) {
+  console.log(array[index]);
+}
+```
+
+**使用 `Array.prototype.forEach` 方法**
+
+```js
+let array = [1, 2, 3, 4, 5, 6];
+array.forEach((number, index) => {
+  console.log(`${number} at index ${index}`);
+});
+```
+
+**使用 `for...of`**
+
+此方法是迭代数组的最新和最方便的方法。它会自动迭代每个元素，而无需您管理索引。
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+for (const number of numbers) {
+  console.log(number);
+}
+```
+
+还有其他可用的内置方法，适用于特定场景，例如：
+
+- `Array.prototype.filter`：您可以使用 `filter` 方法创建一个新数组，其中仅包含满足特定条件的元素。
+- `Array.prototype.map`：您可以使用 `map` 方法基于现有数组创建一个新数组，并使用提供的函数转换每个元素。
+- `Array.prototype.reduce`：您可以使用 `reduce` 方法通过重复调用一个接受两个参数的函数（累积值和当前元素）将所有元素组合成一个值。
+
+---
+
+## 遍历对象
+
+在 JavaScript 中，遍历对象属性和数组非常常见，我们有多种方法可以实现这一点。以下是实现此目的的一些方法：
+
+### `for...in` 语句
+
+此循环遍历对象的所有**可枚举**属性，包括从其原型链继承的属性。
+
+```js
+const obj = {
+  status: 'working',
+  hoursWorked: 3,
+};
+
+for (const property in obj) {
+  console.log(property);
+}
+```
+
+由于 `for...in` 语句遍历对象的所有**可枚举**属性（包括继承的可枚举属性）。因此，大多数情况下，在使用属性之前，您应该通过 `Object.hasOwn(object, property)` 检查该属性是否存在于对象上。
+
+```js
+const obj = {
+  status: 'working',
+  hoursWorked: 3,
+};
+
+for (const property in obj) {
+  if (Object.hasOwn(obj, property)) {
+    console.log(property);
+  }
+}
+```
+
+请注意，不推荐使用 `obj.hasOwnProperty()`，因为它不适用于使用 `Object.create(null)` 创建的对象。建议在较新的浏览器中使用 [`Object.hasOwn()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn)，或者使用旧的 `Object.prototype.hasOwnProperty.call(object, key)`。
+
+### `Object.keys()`
+
+`Object.keys()` 是一种静态方法，它将返回您传递给它的对象的所有可枚举属性名称的数组。由于 `Object.keys()` 返回一个数组，您也可以使用下面列出的数组迭代方法来遍历它。
+
+```js
+const obj = {
+  status: 'working',
+  hoursWorked: 3,
+};
+
+Object.keys(obj).forEach((property) => {
+  console.log(property);
+});
+```
+
+### `Object.entries()`:
+
+此方法返回一个对象的可枚举属性的数组，以 `[key, value]` 对的形式。
+
+```js
+const obj = { a: 1, b: 2, c: 3 };
+Object.entries(obj).forEach(([key, value]) => {
+  console.log(`${key}: ${value}`);
+});
+```
+
+### `Object.getOwnPropertyNames()`
+
+```js
+const obj = { a: 1, b: 2, c: 3 };
+Object.getOwnPropertyNames(obj).forEach((property) => {
+  console.log(property);
+});
+```
+
+`Object.getOwnPropertyNames()` 是一种静态方法，它将列出您传递给它的对象的所有可枚举和不可枚举属性。由于 `Object.getOwnPropertyNames()` 返回一个数组，您也可以使用下面列出的数组迭代方法来遍历它。
+
+## 数组
+
+### `for` 循环
+
+```js
+const arr = [1, 2, 3, 4, 5];
+for (var i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}
+```
+
+这里一个常见的陷阱是 `var` 在函数作用域中，而不是块作用域中，并且大多数情况下您希望使用块作用域迭代器变量。 ES2015 引入了具有块作用域的 `let`，建议使用 `let` 而不是 `var`。
+
+```js
+const arr = [1, 2, 3, 4, 5];
+for (let i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}
+```
+
+### `Array.prototype.forEach()`
+
+```js
+const arr = [1, 2, 3, 4, 5];
+arr.forEach((element, index) => {
+  console.log(`${element} at index ${index}`);
+});
+```
+
+`Array.prototype.forEach()` 方法有时会更方便，如果您不需要使用 `index`，而您只需要单个数组元素。 但是，缺点是您无法中途停止迭代，并且提供的函数将在元素上执行一次。 如果您需要更好地控制迭代，`for` 循环或 `for...of` 语句会更相关。
+
+### `for...of` 语句
+
+```js
+const arr = [1, 2, 3, 4, 5];
+for (let element of arr) {
+  console.log(element);
+}
+```
+
+ES2015 引入了一种新的迭代方式，即 `for-of` 循环，它允许您循环访问符合 [iterable protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterable_protocol) 的对象，例如 `String`、`Array`、`Map`、`Set` 等。 它结合了 `for` 循环和 `forEach()` 方法的优点。 `for` 循环的优点是您可以从中跳出，而 `forEach()` 的优点是它比 `for` 循环更简洁，因为您不需要计数器变量。 使用 `for...of` 语句，您可以同时获得跳出循环的能力和更简洁的语法。
+
+大多数情况下，更喜欢 `.forEach` 方法，但这确实取决于您要执行的操作。 在 ES2015 之前，当我们需要使用 `break` 提前终止循环时，我们使用 `for` 循环。 但现在有了 ES2015，我们可以使用 `for...of` 语句来做到这一点。 当您需要更大的灵活性时，例如每次循环递增迭代器一次以上时，请使用 `for` 循环。
+
+此外，在使用 `for...of` 语句时，如果您需要访问每个数组元素的索引和值，您可以使用 ES2015 `Array.prototype.entries()` 方法来实现：
+
+```js
+const arr = ['a', 'b', 'c'];
+
+for (let [index, elem] of arr.entries()) {
+  console.log(index, elem);
+}
+```
+
+## 延伸阅读
+
+- [Object.getOwnPropertyNames() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames)
+- [Object.keys() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys)
+- [for...of - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)
+- [Array.prototype.forEach() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
