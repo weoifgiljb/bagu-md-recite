@@ -3639,6 +3639,32 @@
     "follow_html": ""
   },
   {
+    "id": "01-JavaScript-目录-md",
+    "title": "JavaScript 主题目录",
+    "week": "01-JavaScript",
+    "folder": "01-JavaScript",
+    "path": "01-JavaScript/目录.md",
+    "ask_md": "先看标题，闭卷口述 90 秒。",
+    "answer_md": "暂无参考答，以你的四行为准。",
+    "follow_md": "",
+    "ask_html": "<p>先看标题，闭卷口述 90 秒。</p>",
+    "answer_html": "<p>暂无参考答，以你的四行为准。</p>",
+    "follow_html": ""
+  },
+  {
+    "id": "02-React-目录-md",
+    "title": "React 主题目录",
+    "week": "02-React",
+    "folder": "02-React",
+    "path": "02-React/目录.md",
+    "ask_md": "先看标题，闭卷口述 90 秒。",
+    "answer_md": "暂无参考答，以你的四行为准。",
+    "follow_md": "",
+    "ask_html": "<p>先看标题，闭卷口述 90 秒。</p>",
+    "answer_html": "<p>暂无参考答，以你的四行为准。</p>",
+    "follow_html": ""
+  },
+  {
     "id": "09-项目深挖-A01-翻译Agent项目介绍与边界-md",
     "title": "题 1：SaleSmartly 翻译 Agent：项目怎么介绍？你负责哪一块？",
     "week": "项目深挖 · 秋招准备",
