@@ -58,6 +58,21 @@ WEEK_ORDER = [
 ]
 
 
+
+def discover_folders() -> list[str]:
+    """Scan Typora题库 for theme folders. Prefer SCAN_FOLDERS order, then append unknowns.
+    Skip 00/01/02: 00 is plan docs; 01/02 cards are kept from legacy questions.json.
+    """
+    if not TY.is_dir():
+        return list(SCAN_FOLDERS)
+    found = [d.name for d in sorted(TY.iterdir()) if d.is_dir() and not d.name.startswith(".")]
+    skip = {x for x in found if x.startswith("00-") or x.startswith("01-") or x.startswith("02-")}
+    ordered = [x for x in SCAN_FOLDERS if x in found]
+    extra = [x for x in found if x not in SCAN_FOLDERS and x not in skip]
+    return ordered + extra
+
+
+
 def md_inline(s: str) -> str:
     s = html.escape(s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
@@ -150,7 +165,7 @@ def parse_md(path: Path, folder: str) -> dict:
     return {
         "id": qid,
         "title": title,
-        "week": WEEK_MAP.get(folder, "其他"),
+        "week": WEEK_MAP.get(folder, folder),
         "folder": folder,
         "path": f"{folder}/{path.name}",
         "ask_md": ask_md,
@@ -212,8 +227,9 @@ def main() -> None:
             existing = []
     kept = load_kept_0102(existing)
 
+    folders = discover_folders()
     scanned: list = []
-    for folder in SCAN_FOLDERS:
+    for folder in folders:
         d = TY / folder
         if not d.is_dir():
             print("MISSING_FOLDER", folder)
@@ -238,7 +254,7 @@ def main() -> None:
     print("TOTAL", len(all_q))
     print("KEPT_01_02", len(kept))
     print("SCANNED_TOTAL", len(scanned))
-    for folder in SCAN_FOLDERS:
+    for folder in folders:
         c = sum(1 for q in all_q if q.get("folder") == folder)
         print("COUNT", folder, c)
 
