@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>八股知识图谱</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+:root{--bg:#0f1419;--panel:#1a2332;--border:#2d3a4d;--text:#e7ecf3;--muted:#8b9bb4;--accent:#5b9fd4}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column}
+header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:16px;margin:0;font-weight:600}
+.hint{color:var(--muted);font-size:12px}
+input[type=search]{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;min-width:180px}
+label.chk{font-size:12px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+main{flex:1;display:grid;grid-template-columns:220px 1fr 320px;min-height:0}
+aside,#detail{background:var(--panel);overflow:auto;padding:12px}
+aside{border-right:1px solid var(--border)}
+#detail{border-left:1px solid var(--border)}
+#graph{min-height:0;background:#0b1017}
+.domain-item{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer}
+.swatch{width:10px;height:10px;border-radius:50%}
+h3{margin:12px 0 8px;font-size:12px;color:var(--muted);font-weight:600;text-transform:none}
+#detail h2{font-size:16px;margin:0 0 8px}
+#detail p,#detail li{font-size:13px;line-height:1.55}
+.muted{color:var(--muted)!important;font-size:12px!important}
+.card{display:block;padding:6px 8px;margin:4px 0;background:#121a26;border:1px solid var(--border);border-radius:8px;color:var(--accent);font-size:12px;word-break:break-all}
+.ring-btn{display:block;width:100%;text-align:left;margin:4px 0;padding:6px 8px;background:#121a26;border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer;font-size:12px}
+.ring-btn:hover{border-color:var(--accent)}
+@media(max-width:900px){main{grid-template-columns:1fr;grid-template-rows:140px 1fr 220px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>八股知识图谱</h1>
+  <span class="hint">域 → 概念 → 题卡。每天走完一条「记忆闭环」。</span>
+  <input id="q" type="search" placeholder="搜索概念…" />
+  <label class="chk"><input id="showCards" type="checkbox" /> 显示题目叶子</label>
+  <label class="chk"><input id="onlyRelated" type="checkbox" /> 只看选中邻域</label>
+</header>
+<main>
+  <aside>
+    <h3>主题域</h3>
+    <div id="domains"></div>
+    <h3>记忆闭环</h3>
+    <div id="rings"></div>
+  </aside>
+  <div id="graph"></div>
+  <section id="detail"><p class="muted">点选节点查看说明、关联与题库路径。</p></section>
+</main>
+<script>
+const COLORS = {
+  "d-js":"#6ea8fe","d-async":"#7dd3fc","d-net":"#34d399","d-browser":"#a3e635",
+  "d-css":"#fbbf24","d-react":"#22d3ee","d-vue":"#4ade80","d-sec":"#f87171",
+  "d-ai":"#c084fc","d-rag":"#e879f9","d-mp":"#fb923c","d-flutter":"#38bdf8",
+  "d-algo":"#a78bfa","d-devtools":"#94a3b8","d-project":"#f472b6"
+};
+let DATA=null, network=null, selected=null;
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function boot(){
+  try{
+    const res = await fetch('./graph.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    DATA = await res.json();
+  }catch(err){
+    document.getElementById('detail').innerHTML =
+      `<p>加载 graph.json 失败。</p>
+       <p class="muted">${esc(err.message)}</p>
+       <p class="muted">请在本目录运行：<code>python build_graph.py</code> 然后
+       <code>python -m http.server 8766</code>，再打开 http://127.0.0.1:8766/</p>`;
+    return;
+  }
+  renderDomains();
+  renderRings();
+  draw();
+}
+
+function renderDomains(){
+  const box=document.getElementById('domains');
+  box.innerHTML='';
+  DATA.nodes.filter(n=>n.group==='domain').forEach(d=>{
+    const lab=document.createElement('label');
+    lab.className='domain-item';
+    lab.innerHTML=`<input type="checkbox" value="${d.id}" checked/><span class="swatch" style="background:${COLORS[d.id]||'#888'}"></span><span>${esc(d.label)}</span>`;
+    lab.querySelector('input').onchange=draw;
+    box.appendChild(lab);
+  });
+}
+
+function renderRings(){
+  const box=document.getElementById('rings');
+  box.innerHTML='';
+  (DATA.rings||[]).forEach(r=>{
+    const b=document.createElement('button');
+    b.className='ring-btn';
+    b.textContent=r.name;
+    b.onclick=()=>focusRing(r.nodes);
+    box.appendChild(b);
+  });
+}
+
+function activeDomains(){
+  return [...document.querySelectorAll('#domains input:checked')].map(i=>i.value);
+}
+
+function visible(){
+  const domains=new Set(activeDomains());
+  const showCards=document.getElementById('showCards').checked;
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  let nodes=DATA.nodes.filter(n=>{
+    if(n.group==='domain') return domains.has(n.id);
+    if(n.group==='concept') return domains.has(n.domain);
+    return false;
+  });
+  let cardNodes=[], cardEdges=[];
+  if(showCards){
+    nodes.filter(n=>n.group==='concept').forEach(c=>{
+      (c.cards||[]).forEach((card,i)=>{
+        const id=`card::${c.id}::${i}`;
+        cardNodes.push({id,label:(card.title||'').slice(0,16),group:'card',domain:c.domain,desc:card.path,card,parent:c.id});
+        cardEdges.push({from:c.id,to:id,type:'implements',label:'题'});
+      });
+    });
+  }
+  if(q){
+    const hit=nodes.filter(n=>n.group==='concept' && (
+      n.label.toLowerCase().includes(q) ||
+      (n.desc||'').toLowerCase().includes(q) ||
+      (n.bullets||[]).some(b=>String(b).toLowerCase().includes(q))
+    ));
+    const need=new Set(hit.map(n=>n.domain));
+    hit.forEach(n=>need.add(n.id));
+    nodes=DATA.nodes.filter(n=>
+      (n.group==='domain' && need.has(n.id)) ||
+      (n.group==='concept' && need.has(n.id))
+    );
+  }
+  if(document.getElementById('onlyRelated').checked && selected){
+    const keep=new Set([selected]);
+    DATA.edges.forEach(e=>{
+      if(e.from===selected||e.to===selected){keep.add(e.from);keep.add(e.to)}
+    });
+    const sel=DATA.nodes.find(n=>n.id===selected);
+    if(sel?.domain) keep.add(sel.domain);
+    if(sel?.group==='domain') DATA.nodes.filter(n=>n.domain===selected).forEach(n=>keep.add(n.id));
+    nodes=nodes.filter(n=>keep.has(n.id));
+    cardNodes=cardNodes.filter(n=>n.parent===selected || keep.has(n.id));
+  }
+  const idset=new Set([...nodes,...cardNodes].map(n=>n.id));
+  const edges=DATA.edges.filter(e=>idset.has(e.from)&&idset.has(e.to))
+    .concat(cardEdges.filter(e=>idset.has(e.from)&&idset.has(e.to)));
+  return {nodes:[...nodes,...cardNodes], edges};
+}
+
+function draw(){
+  if(typeof vis==='undefined'){
+    document.getElementById('detail').innerHTML='<p>vis-network 未加载（需要网络访问 unpkg）。</p>';
+    return;
+  }
+  const {nodes,edges}=visible();
+  const vnodes=new vis.DataSet(nodes.map(n=>({
+    id:n.id,
+    label:n.label,
+    title:n.desc||'',
+    color: n.group==='domain' ? (COLORS[n.id]||'#888') : n.group==='card' ? '#334155' : (COLORS[n.domain]||'#64748b'),
+    shape: n.group==='domain'?'box': n.group==='card'?'dot':'ellipse',
+    size: n.group==='domain'?22: n.group==='card'?8:15,
+    font:{color:'#e7ecf3', size:n.group==='domain'?14:12}
+  })));
+  const vedges=new vis.DataSet(edges.map((e,i)=>({
+    id:i, from:e.from, to:e.to, label:e.label||'',
+    arrows:'to', color:{color:'#475569'}, font:{color:'#8b9bb4', size:10, strokeWidth:0}
+  })));
+  const container=document.getElementById('graph');
+  if(network) network.destroy();
+  network=new vis.Network(container,{nodes:vnodes,edges:vedges},{
+    physics:{stabilization:true, barnesHut:{gravitationalConstant:-2800, springLength:130}},
+    interaction:{hover:true},
+    edges:{smooth:{type:'dynamic'}}
+  });
+  network.on('click', params=>{
+    if(!params.nodes.length) return;
+    selected=params.nodes[0];
+    showDetail(selected);
+    if(document.getElementById('onlyRelated').checked) draw();
+  });
+}
+
+function showDetail(id){
+  const el=document.getElementById('detail');
+  if(String(id).startsWith('card::')){
+    const parts=String(id).split('::');
+    const c=DATA.nodes.find(x=>x.id===parts[1]);
+    const card=c?.cards?.[Number(parts[2])];
+    el.innerHTML = card ? `<h2>${esc(card.title)}</h2>
+      <p class="muted">在 Typora 打开：</p>
+      <div class="card">Typora题库/${esc(card.path)}</div>
+      <p class="muted">概念：${esc(c.label)}</p>` : '<p>未找到卡片</p>';
+    return;
+  }
+  const n=DATA.nodes.find(x=>x.id===id);
+  if(!n){el.innerHTML='<p>未找到节点</p>';return;}
+  const neigh=DATA.edges.filter(e=>e.from===id||e.to===id).map(e=>{
+    const other=e.from===id?e.to:e.from;
+    const on=DATA.nodes.find(x=>x.id===other);
+    return `<li><strong>${esc(e.label||e.type)}</strong> → ${esc(on?on.label:other)}${e.note?` <span class="muted">（${esc(e.note)}）</span>`:''}</li>`;
+  }).join('');
+  const cards=(n.cards||[]).map(c=>`<div class="card">Typora题库/${esc(c.path)}<br/><span class="muted">${esc(c.title)}</span></div>`).join('')
+    || '<p class="muted">暂无挂接题目。运行 build_graph.py 后刷新。</p>';
+  const bullets=(n.bullets||[]).map(b=>`<li>${esc(b)}</li>`).join('');
+  el.innerHTML=`<h2>${esc(n.label)}</h2>
+    <p class="muted">${n.group==='domain'?'主题域':'概念'}</p>
+    <p>${esc(n.desc||'')}</p>
+    ${bullets?`<h3>记忆点</h3><ul>${bullets}</ul>`:''}
+    <h3>关联</h3><ul>${neigh||'<li class="muted">无</li>'}</ul>
+    ${n.group==='concept'?`<h3>题库卡片</h3>${cards}`:''}`;
+}
+
+function focusRing(nodeIds){
+  const need=new Set();
+  nodeIds.forEach(id=>{
+    const n=DATA.nodes.find(x=>x.id===id);
+    if(n) need.add(n.domain||n.id);
+  });
+  document.querySelectorAll('#domains input').forEach(inp=>{
+    inp.checked=need.has(inp.value);
+  });
+  selected=nodeIds[0]||null;
+  document.getElementById('onlyRelated').checked=false;
+  draw();
+  if(selected) showDetail(selected);
+  setTimeout(()=>{
+    if(!network) return;
+    const present=nodeIds.filter(id=>network.findNode(id).length);
+    if(present.length) network.selectNodes(present);
+  },250);
+}
+
+document.getElementById('q').addEventListener('input', draw);
+document.getElementById('showCards').addEventListener('change', draw);
+document.getElementById('onlyRelated').addEventListener('change', draw);
+boot();
+</script>
+</body>
+</html>

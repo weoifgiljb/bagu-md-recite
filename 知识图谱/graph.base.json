@@ -1,0 +1,1860 @@
+{
+  "title": "八股知识图谱",
+  "version": 1,
+  "nodes": [
+    {
+      "id": "d-js",
+      "label": "JavaScript 核心",
+      "group": "domain",
+      "domain": "d-js",
+      "desc": "类型/闭包/原型/this/模块",
+      "cards": []
+    },
+    {
+      "id": "d-async",
+      "label": "异步与并发",
+      "group": "domain",
+      "domain": "d-async",
+      "desc": "事件循环/Promise/async/调度",
+      "cards": []
+    },
+    {
+      "id": "d-net",
+      "label": "网络与HTTP",
+      "group": "domain",
+      "domain": "d-net",
+      "desc": "缓存/CORS/HTTPS/协议选型",
+      "cards": []
+    },
+    {
+      "id": "d-browser",
+      "label": "浏览器与性能",
+      "group": "domain",
+      "domain": "d-browser",
+      "desc": "渲染流水线/回流重绘/优化",
+      "cards": []
+    },
+    {
+      "id": "d-css",
+      "label": "CSS 与布局",
+      "group": "domain",
+      "domain": "d-css",
+      "desc": "盒模型/BFC/层叠/Flex/Grid",
+      "cards": []
+    },
+    {
+      "id": "d-react",
+      "label": "React",
+      "group": "domain",
+      "domain": "d-react",
+      "desc": "渲染/Hooks/状态/并发特性",
+      "cards": []
+    },
+    {
+      "id": "d-vue",
+      "label": "Vue3",
+      "group": "domain",
+      "domain": "d-vue",
+      "desc": "响应式/组件/路由/状态",
+      "cards": []
+    },
+    {
+      "id": "d-sec",
+      "label": "前端安全",
+      "group": "domain",
+      "domain": "d-sec",
+      "desc": "XSS/CSRF/CSP/越权",
+      "cards": []
+    },
+    {
+      "id": "d-ai",
+      "label": "AI 前端",
+      "group": "domain",
+      "domain": "d-ai",
+      "desc": "SSE流式/取消重连/渲染安全",
+      "cards": []
+    },
+    {
+      "id": "d-rag",
+      "label": "RAG 与 Agent",
+      "group": "domain",
+      "domain": "d-rag",
+      "desc": "检索/引用/Tool/人机确认",
+      "cards": []
+    },
+    {
+      "id": "d-mp",
+      "label": "小程序 / Taro",
+      "group": "domain",
+      "domain": "d-mp",
+      "desc": "双线程/setData/登录/分包",
+      "cards": []
+    },
+    {
+      "id": "d-flutter",
+      "label": "Flutter",
+      "group": "domain",
+      "domain": "d-flutter",
+      "desc": "三棵树/Isolate/列表性能",
+      "cards": []
+    },
+    {
+      "id": "d-algo",
+      "label": "算法 Hot100",
+      "group": "domain",
+      "domain": "d-algo",
+      "desc": "数组哈希/双指针/树/DP",
+      "cards": []
+    },
+    {
+      "id": "d-devtools",
+      "label": "工程与排查",
+      "group": "domain",
+      "domain": "d-devtools",
+      "desc": "Network/Performance/火焰图",
+      "cards": []
+    },
+    {
+      "id": "d-project",
+      "label": "项目深挖",
+      "group": "domain",
+      "domain": "d-project",
+      "desc": "口径/链路/竞态/可观测",
+      "cards": []
+    },
+    {
+      "id": "c-type",
+      "label": "类型与相等",
+      "group": "concept",
+      "domain": "d-js",
+      "desc": "== vs ===；null/undefined；包装对象",
+      "bullets": [
+        "== vs ===",
+        "null/undefined",
+        "包装对象"
+      ],
+      "cards": [],
+      "keywords": [
+        "类型",
+        "相等",
+        "==",
+        "null",
+        "undefined"
+      ]
+    },
+    {
+      "id": "c-closure",
+      "label": "闭包与作用域",
+      "group": "concept",
+      "domain": "d-js",
+      "desc": "词法作用域；闭包应用与内存",
+      "bullets": [
+        "词法作用域",
+        "闭包应用与内存"
+      ],
+      "cards": [],
+      "keywords": [
+        "闭包",
+        "作用域",
+        "词法"
+      ]
+    },
+    {
+      "id": "c-proto",
+      "label": "原型与继承",
+      "group": "concept",
+      "domain": "d-js",
+      "desc": "原型链；class 语法糖",
+      "bullets": [
+        "原型链",
+        "class 语法糖"
+      ],
+      "cards": [],
+      "keywords": [
+        "原型",
+        "继承",
+        "prototype"
+      ]
+    },
+    {
+      "id": "c-this",
+      "label": "this 绑定",
+      "group": "concept",
+      "domain": "d-js",
+      "desc": "call/apply/bind；箭头函数",
+      "bullets": [
+        "call/apply/bind",
+        "箭头函数"
+      ],
+      "cards": [],
+      "keywords": [
+        "this",
+        "call",
+        "apply",
+        "bind"
+      ]
+    },
+    {
+      "id": "c-module",
+      "label": "ES Module",
+      "group": "concept",
+      "domain": "d-js",
+      "desc": "import/export；循环依赖",
+      "bullets": [
+        "import/export",
+        "循环依赖"
+      ],
+      "cards": [],
+      "keywords": [
+        "ES Mod"
+      ]
+    },
+    {
+      "id": "c-loop",
+      "label": "事件循环",
+      "group": "concept",
+      "domain": "d-async",
+      "desc": "宏任务/微任务；渲染时机",
+      "bullets": [
+        "宏任务/微任务",
+        "渲染时机"
+      ],
+      "cards": [],
+      "keywords": [
+        "事件循环",
+        "宏任务",
+        "微任务",
+        "event loop"
+      ]
+    },
+    {
+      "id": "c-promise",
+      "label": "Promise",
+      "group": "concept",
+      "domain": "d-async",
+      "desc": "状态机；链式/并发",
+      "bullets": [
+        "状态机",
+        "链式/并发"
+      ],
+      "cards": [],
+      "keywords": [
+        "Promise"
+      ]
+    },
+    {
+      "id": "c-async",
+      "label": "async/await",
+      "group": "concept",
+      "domain": "d-async",
+      "desc": "错误处理；与 Promise 关系",
+      "bullets": [
+        "错误处理",
+        "与 Promise 关系"
+      ],
+      "cards": [],
+      "keywords": [
+        "async",
+        "await"
+      ]
+    },
+    {
+      "id": "c-abort",
+      "label": "请求取消",
+      "group": "concept",
+      "domain": "d-async",
+      "desc": "AbortController；竞态",
+      "bullets": [
+        "AbortController",
+        "竞态"
+      ],
+      "cards": [],
+      "keywords": [
+        "Abort",
+        "取消",
+        "竞态"
+      ]
+    },
+    {
+      "id": "c-http-cache",
+      "label": "HTTP 缓存",
+      "group": "concept",
+      "domain": "d-net",
+      "desc": "强缓存；协商缓存",
+      "bullets": [
+        "强缓存",
+        "协商缓存"
+      ],
+      "cards": [],
+      "keywords": [
+        "强缓存",
+        "协商缓存",
+        "缓存"
+      ]
+    },
+    {
+      "id": "c-cors",
+      "label": "CORS 跨域",
+      "group": "concept",
+      "domain": "d-net",
+      "desc": "简单/预检；凭证",
+      "bullets": [
+        "简单/预检",
+        "凭证"
+      ],
+      "cards": [],
+      "keywords": [
+        "CORS",
+        "跨域"
+      ]
+    },
+    {
+      "id": "c-https",
+      "label": "HTTPS/TLS",
+      "group": "concept",
+      "domain": "d-net",
+      "desc": "证书；中间人",
+      "bullets": [
+        "证书",
+        "中间人"
+      ],
+      "cards": [],
+      "keywords": [
+        "HTTPS",
+        "证书",
+        "TLS"
+      ]
+    },
+    {
+      "id": "c-sse-ws",
+      "label": "SSE vs WebSocket",
+      "group": "concept",
+      "domain": "d-net",
+      "desc": "单向流；双向推送",
+      "bullets": [
+        "单向流",
+        "双向推送"
+      ],
+      "cards": [],
+      "keywords": [
+        "WebSocket",
+        "SSE",
+        "选型"
+      ]
+    },
+    {
+      "id": "c-cdn",
+      "label": "CDN 与传输",
+      "group": "concept",
+      "domain": "d-net",
+      "desc": "就近；压缩/HTTP2",
+      "bullets": [
+        "就近",
+        "压缩/HTTP2"
+      ],
+      "cards": [],
+      "keywords": [
+        "CDN 与传"
+      ]
+    },
+    {
+      "id": "c-render",
+      "label": "渲染流水线",
+      "group": "concept",
+      "domain": "d-browser",
+      "desc": "解析/样式/布局/绘制/合成",
+      "bullets": [
+        "解析/样式/布局/绘制/合成"
+      ],
+      "cards": [],
+      "keywords": [
+        "渲染流水线"
+      ]
+    },
+    {
+      "id": "c-reflow",
+      "label": "回流与重绘",
+      "group": "concept",
+      "domain": "d-browser",
+      "desc": "强制同步布局；优化手段",
+      "bullets": [
+        "强制同步布局",
+        "优化手段"
+      ],
+      "cards": [],
+      "keywords": [
+        "回流",
+        "重绘",
+        "强制布局",
+        "reflow"
+      ]
+    },
+    {
+      "id": "c-perf",
+      "label": "性能指标",
+      "group": "concept",
+      "domain": "d-browser",
+      "desc": "LCP/INP/CLS；长任务",
+      "bullets": [
+        "LCP/INP/CLS",
+        "长任务"
+      ],
+      "cards": [],
+      "keywords": [
+        "性能指标"
+      ]
+    },
+    {
+      "id": "c-storage",
+      "label": "浏览器存储",
+      "group": "concept",
+      "domain": "d-browser",
+      "desc": "Cookie；local/sessionStorage",
+      "bullets": [
+        "Cookie",
+        "local/sessionStorage"
+      ],
+      "cards": [],
+      "keywords": [
+        "浏览器存储"
+      ]
+    },
+    {
+      "id": "c-box",
+      "label": "盒模型",
+      "group": "concept",
+      "domain": "d-css",
+      "desc": "content-box；border-box",
+      "bullets": [
+        "content-box",
+        "border-box"
+      ],
+      "cards": [],
+      "keywords": [
+        "盒模型",
+        "box-sizing"
+      ]
+    },
+    {
+      "id": "c-bfc",
+      "label": "BFC",
+      "group": "concept",
+      "domain": "d-css",
+      "desc": "触发条件；解决浮动/外边距",
+      "bullets": [
+        "触发条件",
+        "解决浮动/外边距"
+      ],
+      "cards": [],
+      "keywords": [
+        "BFC"
+      ]
+    },
+    {
+      "id": "c-stacking",
+      "label": "层叠上下文",
+      "group": "concept",
+      "domain": "d-css",
+      "desc": "z-index；创建条件",
+      "bullets": [
+        "z-index",
+        "创建条件"
+      ],
+      "cards": [],
+      "keywords": [
+        "层叠",
+        "z-index"
+      ]
+    },
+    {
+      "id": "c-flex",
+      "label": "Flex/Grid",
+      "group": "concept",
+      "domain": "d-css",
+      "desc": "一维 vs 二维；常见坑",
+      "bullets": [
+        "一维 vs 二维",
+        "常见坑"
+      ],
+      "cards": [],
+      "keywords": [
+        "Flex",
+        "Grid"
+      ]
+    },
+    {
+      "id": "c-responsive",
+      "label": "响应式",
+      "group": "concept",
+      "domain": "d-css",
+      "desc": "rem/vw；媒体查询",
+      "bullets": [
+        "rem/vw",
+        "媒体查询"
+      ],
+      "cards": [],
+      "keywords": [
+        "响应式"
+      ]
+    },
+    {
+      "id": "c-reconcile",
+      "label": "协调与 Fiber",
+      "group": "concept",
+      "domain": "d-react",
+      "desc": "diff；优先级",
+      "bullets": [
+        "diff",
+        "优先级"
+      ],
+      "cards": [],
+      "keywords": [
+        "协调与 Fi"
+      ]
+    },
+    {
+      "id": "c-hooks",
+      "label": "Hooks",
+      "group": "concept",
+      "domain": "d-react",
+      "desc": "useState/Effect；闭包陷阱",
+      "bullets": [
+        "useState/Effect",
+        "闭包陷阱"
+      ],
+      "cards": [],
+      "keywords": [
+        "useState",
+        "useEffect",
+        "Hooks"
+      ]
+    },
+    {
+      "id": "c-key",
+      "label": "key 与列表",
+      "group": "concept",
+      "domain": "d-react",
+      "desc": "稳定 key；重渲染",
+      "bullets": [
+        "稳定 key",
+        "重渲染"
+      ],
+      "cards": [],
+      "keywords": [
+        "key 与列"
+      ]
+    },
+    {
+      "id": "c-memo",
+      "label": "性能优化",
+      "group": "concept",
+      "domain": "d-react",
+      "desc": "memo/useMemo；状态下沉",
+      "bullets": [
+        "memo/useMemo",
+        "状态下沉"
+      ],
+      "cards": [],
+      "keywords": [
+        "性能优化"
+      ]
+    },
+    {
+      "id": "c-reactive",
+      "label": "响应式原理",
+      "group": "concept",
+      "domain": "d-vue",
+      "desc": "Proxy；依赖收集",
+      "bullets": [
+        "Proxy",
+        "依赖收集"
+      ],
+      "cards": [],
+      "keywords": [
+        "响应式",
+        "Proxy",
+        "依赖收集"
+      ]
+    },
+    {
+      "id": "c-ref",
+      "label": "ref/reactive",
+      "group": "concept",
+      "domain": "d-vue",
+      "desc": "解包；使用场景",
+      "bullets": [
+        "解包",
+        "使用场景"
+      ],
+      "cards": [],
+      "keywords": [
+        "ref",
+        "reactive"
+      ]
+    },
+    {
+      "id": "c-computed",
+      "label": "computed/watch",
+      "group": "concept",
+      "domain": "d-vue",
+      "desc": "缓存；异步侦听",
+      "bullets": [
+        "缓存",
+        "异步侦听"
+      ],
+      "cards": [],
+      "keywords": [
+        "computed",
+        "watch"
+      ]
+    },
+    {
+      "id": "c-lifecycle",
+      "label": "生命周期",
+      "group": "concept",
+      "domain": "d-vue",
+      "desc": "组合式对应；onMounted",
+      "bullets": [
+        "组合式对应",
+        "onMounted"
+      ],
+      "cards": [],
+      "keywords": [
+        "生命周期"
+      ]
+    },
+    {
+      "id": "c-diff-vue",
+      "label": "虚拟 DOM 与 diff",
+      "group": "concept",
+      "domain": "d-vue",
+      "desc": "patch；key",
+      "bullets": [
+        "patch",
+        "key"
+      ],
+      "cards": [],
+      "keywords": [
+        "虚拟DOM",
+        "diff",
+        "虚拟 DOM"
+      ]
+    },
+    {
+      "id": "c-pinia",
+      "label": "Pinia",
+      "group": "concept",
+      "domain": "d-vue",
+      "desc": "模块；持久化",
+      "bullets": [
+        "模块",
+        "持久化"
+      ],
+      "cards": [],
+      "keywords": [
+        "Pinia"
+      ]
+    },
+    {
+      "id": "c-xss",
+      "label": "XSS",
+      "group": "concept",
+      "domain": "d-sec",
+      "desc": "类型；消毒/CSP",
+      "bullets": [
+        "类型",
+        "消毒/CSP"
+      ],
+      "cards": [],
+      "keywords": [
+        "XSS"
+      ]
+    },
+    {
+      "id": "c-csrf",
+      "label": "CSRF",
+      "group": "concept",
+      "domain": "d-sec",
+      "desc": "Cookie；Token/SameSite",
+      "bullets": [
+        "Cookie",
+        "Token/SameSite"
+      ],
+      "cards": [],
+      "keywords": [
+        "CSRF"
+      ]
+    },
+    {
+      "id": "c-authz",
+      "label": "越权",
+      "group": "concept",
+      "domain": "d-sec",
+      "desc": "水平/垂直；前端只能辅助",
+      "bullets": [
+        "水平/垂直",
+        "前端只能辅助"
+      ],
+      "cards": [],
+      "keywords": [
+        "越权"
+      ]
+    },
+    {
+      "id": "c-csp",
+      "label": "CSP",
+      "group": "concept",
+      "domain": "d-sec",
+      "desc": "策略；与 XSS 关系",
+      "bullets": [
+        "策略",
+        "与 XSS 关系"
+      ],
+      "cards": [],
+      "keywords": [
+        "CSP"
+      ]
+    },
+    {
+      "id": "c-sse",
+      "label": "SSE 流式输出",
+      "group": "concept",
+      "domain": "d-ai",
+      "desc": "fetch stream；EventSource",
+      "bullets": [
+        "fetch stream",
+        "EventSource"
+      ],
+      "cards": [],
+      "keywords": [
+        "SSE",
+        "流式"
+      ]
+    },
+    {
+      "id": "c-typewriter",
+      "label": "打字机渲染",
+      "group": "concept",
+      "domain": "d-ai",
+      "desc": "增量 DOM；Markdown",
+      "bullets": [
+        "增量 DOM",
+        "Markdown"
+      ],
+      "cards": [],
+      "keywords": [
+        "打字机",
+        "Markdown"
+      ]
+    },
+    {
+      "id": "c-ai-cancel",
+      "label": "停止/重连",
+      "group": "concept",
+      "domain": "d-ai",
+      "desc": "Abort；断线续传",
+      "bullets": [
+        "Abort",
+        "断线续传"
+      ],
+      "cards": [],
+      "keywords": [
+        "取消",
+        "重连",
+        "停止"
+      ]
+    },
+    {
+      "id": "c-ai-xss",
+      "label": "模型输出 XSS",
+      "group": "concept",
+      "domain": "d-ai",
+      "desc": "Markdown 消毒；禁止 raw HTML",
+      "bullets": [
+        "Markdown 消毒",
+        "禁止 raw HTML"
+      ],
+      "cards": [],
+      "keywords": [
+        "消毒",
+        "XSS",
+        "富文本"
+      ]
+    },
+    {
+      "id": "c-token",
+      "label": "上下文与 Token",
+      "group": "concept",
+      "domain": "d-ai",
+      "desc": "裁剪；成本",
+      "bullets": [
+        "裁剪",
+        "成本"
+      ],
+      "cards": [],
+      "keywords": [
+        "Token",
+        "上下文"
+      ]
+    },
+    {
+      "id": "c-rag-pipe",
+      "label": "RAG 链路",
+      "group": "concept",
+      "domain": "d-rag",
+      "desc": "切片/嵌入/检索/生成",
+      "bullets": [
+        "切片/嵌入/检索/生成"
+      ],
+      "cards": [],
+      "keywords": [
+        "RAG"
+      ]
+    },
+    {
+      "id": "c-cite",
+      "label": "引用可追溯",
+      "group": "concept",
+      "domain": "d-rag",
+      "desc": "高亮；来源卡片",
+      "bullets": [
+        "高亮",
+        "来源卡片"
+      ],
+      "cards": [],
+      "keywords": [
+        "引用",
+        "可追溯"
+      ]
+    },
+    {
+      "id": "c-tool",
+      "label": "Tool Calling",
+      "group": "concept",
+      "domain": "d-rag",
+      "desc": "人机确认；权限",
+      "bullets": [
+        "人机确认",
+        "权限"
+      ],
+      "cards": [],
+      "keywords": [
+        "Tool",
+        "人机确认",
+        "Calling"
+      ]
+    },
+    {
+      "id": "c-agent-ui",
+      "label": "Agent 进度 UI",
+      "group": "concept",
+      "domain": "d-rag",
+      "desc": "步骤时间线；失败可重试",
+      "bullets": [
+        "步骤时间线",
+        "失败可重试"
+      ],
+      "cards": [],
+      "keywords": [
+        "Agent "
+      ]
+    },
+    {
+      "id": "c-dual",
+      "label": "双线程模型",
+      "group": "concept",
+      "domain": "d-mp",
+      "desc": "逻辑层/渲染层；与 H5 差",
+      "bullets": [
+        "逻辑层/渲染层",
+        "与 H5 差"
+      ],
+      "cards": [],
+      "keywords": [
+        "双线程",
+        "双线程"
+      ]
+    },
+    {
+      "id": "c-setdata",
+      "label": "setData 性能",
+      "group": "concept",
+      "domain": "d-mp",
+      "desc": "合并更新；数据路径",
+      "bullets": [
+        "合并更新",
+        "数据路径"
+      ],
+      "cards": [],
+      "keywords": [
+        "setData",
+        "setData"
+      ]
+    },
+    {
+      "id": "c-mp-login",
+      "label": "登录与鉴权",
+      "group": "concept",
+      "domain": "d-mp",
+      "desc": "code；Token 存储",
+      "bullets": [
+        "code",
+        "Token 存储"
+      ],
+      "cards": [],
+      "keywords": [
+        "登录",
+        "鉴权",
+        "Token"
+      ]
+    },
+    {
+      "id": "c-分包",
+      "label": "路由与分包",
+      "group": "concept",
+      "domain": "d-mp",
+      "desc": "主包体积；预下载",
+      "bullets": [
+        "主包体积",
+        "预下载"
+      ],
+      "cards": [],
+      "keywords": [
+        "分包",
+        "路由"
+      ]
+    },
+    {
+      "id": "c-trees",
+      "label": "三棵树",
+      "group": "concept",
+      "domain": "d-flutter",
+      "desc": "Widget/Element/RenderObject",
+      "bullets": [
+        "Widget/Element/RenderObject"
+      ],
+      "cards": [],
+      "keywords": [
+        "三棵树"
+      ]
+    },
+    {
+      "id": "c-isolate",
+      "label": "Isolate",
+      "group": "concept",
+      "domain": "d-flutter",
+      "desc": "与 Platform Channel",
+      "bullets": [
+        "与 Platform Channel"
+      ],
+      "cards": [],
+      "keywords": [
+        "Isolate",
+        "Platform"
+      ]
+    },
+    {
+      "id": "c-list-perf",
+      "label": "列表性能",
+      "group": "concept",
+      "domain": "d-flutter",
+      "desc": "懒加载；卡顿排查",
+      "bullets": [
+        "懒加载",
+        "卡顿排查"
+      ],
+      "cards": [],
+      "keywords": [
+        "列表性能",
+        "卡顿"
+      ]
+    },
+    {
+      "id": "c-hash",
+      "label": "数组与哈希",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "两数之和；异位词",
+      "bullets": [
+        "两数之和",
+        "异位词"
+      ],
+      "cards": [],
+      "keywords": [
+        "两数之和",
+        "异位词",
+        "连续序列"
+      ]
+    },
+    {
+      "id": "c-two-ptr",
+      "label": "双指针",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "盛水；三数之和",
+      "bullets": [
+        "盛水",
+        "三数之和"
+      ],
+      "cards": [],
+      "keywords": [
+        "盛最多水",
+        "三数之和",
+        "接雨水"
+      ]
+    },
+    {
+      "id": "c-window",
+      "label": "滑动窗口",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "无重复子串",
+      "bullets": [
+        "无重复子串"
+      ],
+      "cards": [],
+      "keywords": [
+        "无重复",
+        "滑动",
+        "异位词"
+      ]
+    },
+    {
+      "id": "c-list",
+      "label": "链表",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "反转；环；合并",
+      "bullets": [
+        "反转",
+        "环",
+        "合并"
+      ],
+      "cards": [],
+      "keywords": [
+        "反转链表",
+        "环形链表",
+        "合并两个有序",
+        "倒数第"
+      ]
+    },
+    {
+      "id": "c-tree",
+      "label": "二叉树",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "遍历；BST；层序",
+      "bullets": [
+        "遍历",
+        "BST",
+        "层序"
+      ],
+      "cards": [],
+      "keywords": [
+        "中序",
+        "最大深度",
+        "翻转二叉树",
+        "对称",
+        "层序",
+        "二叉搜索"
+      ]
+    },
+    {
+      "id": "c-dp",
+      "label": "动态规划入门",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "爬楼梯；打家劫舍；零钱",
+      "bullets": [
+        "爬楼梯",
+        "打家劫舍",
+        "零钱"
+      ],
+      "cards": [],
+      "keywords": [
+        "爬楼梯",
+        "打家劫舍",
+        "最大子数组",
+        "零钱"
+      ]
+    },
+    {
+      "id": "c-stack",
+      "label": "栈与堆",
+      "group": "concept",
+      "domain": "d-algo",
+      "desc": "括号；最小栈；第K大",
+      "bullets": [
+        "括号",
+        "最小栈",
+        "第K大"
+      ],
+      "cards": [],
+      "keywords": [
+        "括号",
+        "最小栈",
+        "第K"
+      ]
+    },
+    {
+      "id": "c-network",
+      "label": "Network 排查",
+      "group": "concept",
+      "domain": "d-devtools",
+      "desc": "瀑布；TTFB；cURL",
+      "bullets": [
+        "瀑布",
+        "TTFB",
+        "cURL"
+      ],
+      "cards": [],
+      "keywords": [
+        "Network",
+        "瀑布",
+        "cURL",
+        "接口"
+      ]
+    },
+    {
+      "id": "c-perf-panel",
+      "label": "Performance",
+      "group": "concept",
+      "domain": "d-devtools",
+      "desc": "录制；长任务",
+      "bullets": [
+        "录制",
+        "长任务"
+      ],
+      "cards": [],
+      "keywords": [
+        "Performance",
+        "录制",
+        "Long Task",
+        "长任务"
+      ]
+    },
+    {
+      "id": "c-flame",
+      "label": "火焰图",
+      "group": "concept",
+      "domain": "d-devtools",
+      "desc": "Self/Total；Bottom-Up",
+      "bullets": [
+        "Self/Total",
+        "Bottom-Up"
+      ],
+      "cards": [],
+      "keywords": [
+        "火焰图",
+        "Bottom-Up",
+        "Self"
+      ]
+    },
+    {
+      "id": "c-app-panel",
+      "label": "Application",
+      "group": "concept",
+      "domain": "d-devtools",
+      "desc": "Token；清站点数据",
+      "bullets": [
+        "Token",
+        "清站点数据"
+      ],
+      "cards": [],
+      "keywords": [
+        "Application",
+        "Token",
+        "清Token"
+      ]
+    },
+    {
+      "id": "c-pitch",
+      "label": "项目口述三层",
+      "group": "concept",
+      "domain": "d-project",
+      "desc": "背景/难点/结果",
+      "bullets": [
+        "背景/难点/结果"
+      ],
+      "cards": [],
+      "keywords": [
+        "项目介绍",
+        "三层口径",
+        "口述"
+      ]
+    },
+    {
+      "id": "c-race",
+      "label": "列表竞态",
+      "group": "concept",
+      "domain": "d-project",
+      "desc": "请求序号；取消",
+      "bullets": [
+        "请求序号",
+        "取消"
+      ],
+      "cards": [],
+      "keywords": [
+        "竞态"
+      ]
+    },
+    {
+      "id": "c-idem",
+      "label": "幂等与重试",
+      "group": "concept",
+      "domain": "d-project",
+      "desc": "429；部分成功",
+      "bullets": [
+        "429",
+        "部分成功"
+      ],
+      "cards": [],
+      "keywords": [
+        "429",
+        "幂等",
+        "重试",
+        "部分成功"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "d-js",
+      "to": "c-type",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-js",
+      "to": "c-closure",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-js",
+      "to": "c-proto",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-js",
+      "to": "c-this",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-js",
+      "to": "c-module",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-async",
+      "to": "c-loop",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-async",
+      "to": "c-promise",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-async",
+      "to": "c-async",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-async",
+      "to": "c-abort",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-net",
+      "to": "c-http-cache",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-net",
+      "to": "c-cors",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-net",
+      "to": "c-https",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-net",
+      "to": "c-sse-ws",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-net",
+      "to": "c-cdn",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-browser",
+      "to": "c-render",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-browser",
+      "to": "c-reflow",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-browser",
+      "to": "c-perf",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-browser",
+      "to": "c-storage",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-css",
+      "to": "c-box",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-css",
+      "to": "c-bfc",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-css",
+      "to": "c-stacking",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-css",
+      "to": "c-flex",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-css",
+      "to": "c-responsive",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-react",
+      "to": "c-reconcile",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-react",
+      "to": "c-hooks",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-react",
+      "to": "c-key",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-react",
+      "to": "c-memo",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-vue",
+      "to": "c-reactive",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-vue",
+      "to": "c-ref",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-vue",
+      "to": "c-computed",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-vue",
+      "to": "c-lifecycle",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-vue",
+      "to": "c-diff-vue",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-vue",
+      "to": "c-pinia",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-sec",
+      "to": "c-xss",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-sec",
+      "to": "c-csrf",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-sec",
+      "to": "c-authz",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-sec",
+      "to": "c-csp",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-ai",
+      "to": "c-sse",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-ai",
+      "to": "c-typewriter",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-ai",
+      "to": "c-ai-cancel",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-ai",
+      "to": "c-ai-xss",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-ai",
+      "to": "c-token",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-rag",
+      "to": "c-rag-pipe",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-rag",
+      "to": "c-cite",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-rag",
+      "to": "c-tool",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-rag",
+      "to": "c-agent-ui",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-mp",
+      "to": "c-dual",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-mp",
+      "to": "c-setdata",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-mp",
+      "to": "c-mp-login",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-mp",
+      "to": "c-分包",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-flutter",
+      "to": "c-trees",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-flutter",
+      "to": "c-isolate",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-flutter",
+      "to": "c-list-perf",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-hash",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-two-ptr",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-window",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-list",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-tree",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-dp",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-algo",
+      "to": "c-stack",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-devtools",
+      "to": "c-network",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-devtools",
+      "to": "c-perf-panel",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-devtools",
+      "to": "c-flame",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-devtools",
+      "to": "c-app-panel",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-project",
+      "to": "c-pitch",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-project",
+      "to": "c-race",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "d-project",
+      "to": "c-idem",
+      "type": "contains",
+      "label": "包含"
+    },
+    {
+      "from": "c-loop",
+      "to": "c-promise",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "事件循环决定 Promise 回调时机"
+    },
+    {
+      "from": "c-promise",
+      "to": "c-async",
+      "type": "related",
+      "label": "相关",
+      "note": "async/await 是 Promise 语法糖"
+    },
+    {
+      "from": "c-abort",
+      "to": "c-ai-cancel",
+      "type": "related",
+      "label": "相关",
+      "note": "流式对话停止生成同一套取消语义"
+    },
+    {
+      "from": "c-abort",
+      "to": "c-race",
+      "type": "related",
+      "label": "相关",
+      "note": "用取消/序号解决竞态"
+    },
+    {
+      "from": "c-sse",
+      "to": "c-sse-ws",
+      "type": "contrasts",
+      "label": "对比",
+      "note": "SSE 单向；WS 双向"
+    },
+    {
+      "from": "c-sse",
+      "to": "c-typewriter",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "流式到达后才谈增量渲染"
+    },
+    {
+      "from": "c-typewriter",
+      "to": "c-ai-xss",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "Markdown 渲染必须消毒"
+    },
+    {
+      "from": "c-xss",
+      "to": "c-ai-xss",
+      "type": "related",
+      "label": "相关",
+      "note": "模型输出是新的 XSS 入口"
+    },
+    {
+      "from": "c-xss",
+      "to": "c-csp",
+      "type": "related",
+      "label": "相关",
+      "note": "CSP 是纵深防御"
+    },
+    {
+      "from": "c-csrf",
+      "to": "c-storage",
+      "type": "related",
+      "label": "相关",
+      "note": "Cookie 策略影响 CSRF"
+    },
+    {
+      "from": "c-http-cache",
+      "to": "c-cdn",
+      "type": "related",
+      "label": "相关",
+      "note": "静态资源缓存与 CDN 协同"
+    },
+    {
+      "from": "c-cors",
+      "to": "c-network",
+      "type": "implements",
+      "label": "落到",
+      "note": "CORS 问题在 Network 里看 OPTIONS"
+    },
+    {
+      "from": "c-reflow",
+      "to": "c-flame",
+      "type": "related",
+      "label": "相关",
+      "note": "强制布局在火焰图里可见"
+    },
+    {
+      "from": "c-reflow",
+      "to": "c-perf-panel",
+      "type": "related",
+      "label": "相关",
+      "note": "卡顿录制定位回流"
+    },
+    {
+      "from": "c-box",
+      "to": "c-bfc",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "先懂盒模型再谈 BFC"
+    },
+    {
+      "from": "c-bfc",
+      "to": "c-stacking",
+      "type": "related",
+      "label": "相关",
+      "note": "都是「布局隔离」家族问题"
+    },
+    {
+      "from": "c-reactive",
+      "to": "c-ref",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "原理支撑 API 选择"
+    },
+    {
+      "from": "c-computed",
+      "to": "c-reactive",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "依赖收集驱动 computed"
+    },
+    {
+      "from": "c-hooks",
+      "to": "c-closure",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "Hooks 闭包陷阱来自 JS 作用域"
+    },
+    {
+      "from": "c-reconcile",
+      "to": "c-diff-vue",
+      "type": "contrasts",
+      "label": "对比",
+      "note": "两套虚拟 DOM 思路可对比着背"
+    },
+    {
+      "from": "c-setdata",
+      "to": "c-dual",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "双线程通信成本解释 setData"
+    },
+    {
+      "from": "c-rag-pipe",
+      "to": "c-cite",
+      "type": "requires",
+      "label": "先掌握",
+      "note": "RAG 产品要可追溯引用"
+    },
+    {
+      "from": "c-tool",
+      "to": "c-authz",
+      "type": "related",
+      "label": "相关",
+      "note": "高风险工具调用≈权限问题"
+    },
+    {
+      "from": "c-hash",
+      "to": "c-two-ptr",
+      "type": "related",
+      "label": "相关",
+      "note": "数组题常见两种切入"
+    },
+    {
+      "from": "c-window",
+      "to": "c-hash",
+      "type": "related",
+      "label": "相关",
+      "note": "窗口内常用哈希计数"
+    }
+  ],
+  "rings": [
+    {
+      "name": "浏览器一圈",
+      "nodes": [
+        "c-render",
+        "c-reflow",
+        "c-http-cache",
+        "c-cors",
+        "c-network"
+      ]
+    },
+    {
+      "name": "Vue 响应式一圈",
+      "nodes": [
+        "c-reactive",
+        "c-ref",
+        "c-computed",
+        "c-lifecycle",
+        "c-diff-vue"
+      ]
+    },
+    {
+      "name": "AI 对话一圈",
+      "nodes": [
+        "c-sse",
+        "c-typewriter",
+        "c-ai-cancel",
+        "c-ai-xss",
+        "c-token"
+      ]
+    },
+    {
+      "name": "安全一圈",
+      "nodes": [
+        "c-xss",
+        "c-csrf",
+        "c-csp",
+        "c-authz"
+      ]
+    },
+    {
+      "name": "算法入门一圈",
+      "nodes": [
+        "c-hash",
+        "c-two-ptr",
+        "c-window",
+        "c-list",
+        "c-tree",
+        "c-dp"
+      ]
+    },
+    {
+      "name": "排查一圈",
+      "nodes": [
+        "c-network",
+        "c-perf-panel",
+        "c-flame",
+        "c-app-panel"
+      ]
+    }
+  ]
+}
